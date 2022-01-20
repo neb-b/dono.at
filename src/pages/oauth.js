@@ -19,20 +19,20 @@ export default function Home(props) {
 export async function getServerSideProps(context) {
   const { code: streamLabsCode } = context.query;
   console.log("streamlabs", streamLabsCode);
-  const vals = {
-    client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
-    client_secret: process.env.STREAMLABS_CLIENT_SECRET,
-    redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
-    code: streamLabsCode,
-  };
 
   try {
-    // const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
-    //   grant_type: "authorization_code",
-    //   ...vals,
-    // });
+    const vals = {
+      client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
+      client_secret: process.env.STREAMLABS_CLIENT_SECRET,
+      redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
+      code: streamLabsCode,
+    };
 
-    const data = {};
+    const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
+      grant_type: "authorization_code",
+      ...vals,
+    });
+
     return {
       props: { data },
     };
@@ -40,7 +40,6 @@ export async function getServerSideProps(context) {
     return {
       props: {
         error: error.response.data,
-        vals,
       },
     };
 
