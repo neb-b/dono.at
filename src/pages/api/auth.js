@@ -10,7 +10,7 @@ async function apiRouteHandler(req, res) {
       client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
       client_secret: process.env.STREAMLABS_CLIENT_SECRET,
       redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
-      code: "gn9w0RkJB358siF9auxZjiwhMSyFhV4Lg8a0KGsg",
+      code: "coTWCxmgXr4FFzXjExuizOQsWMXO5jYN9s6HHWy2",
     };
 
     const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
