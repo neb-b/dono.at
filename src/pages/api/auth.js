@@ -13,7 +13,7 @@ async function apiRouteHandler(req, res) {
       code: "coTWCxmgXr4FFzXjExuizOQsWMXO5jYN9s6HHWy2",
     };
 
-    const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
+    const { data } = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
       grant_type: "authorization_code",
       ...vals,
     });

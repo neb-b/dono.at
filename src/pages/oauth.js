@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
       code: streamLabsCode,
     };
 
-    const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
+    const { data } = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
       grant_type: "authorization_code",
       ...vals,
     });
