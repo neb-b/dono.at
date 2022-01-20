@@ -23,12 +23,12 @@ export async function getServerSideProps(context) {
     client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
     client_secret: process.env.STREAMLABS_CLIENT_SECRET,
     redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
+    code: streamLabsCode,
   };
 
   try {
     const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
       grant_type: "authorization_code",
-      code: streamLabsCode,
       ...vals,
     });
 
