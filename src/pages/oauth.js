@@ -18,7 +18,7 @@ export default function Home(props) {
 
 export async function getServerSideProps(context) {
   const { code: streamLabsCode } = context.query;
-
+  console.log("streamlabs", streamLabsCode);
   const vals = {
     client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
     client_secret: process.env.STREAMLABS_CLIENT_SECRET,
@@ -39,6 +39,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         error: error.response.data,
+        vals,
       },
     };
 
