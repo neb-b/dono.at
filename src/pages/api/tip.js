@@ -43,29 +43,29 @@ import axios from "axios";
 //     res.status(error.status || 500).json();
 //   }
 // }
-​
+
 async function apiRouteHandler(req, res) {
-//   const {
-//     body: { amount },
-//   } = req;
-// ​
-//   try {
-//     const {
-//       data: { invoiceId },
-//     } = await apiInstance.post(`/invoices/handle/${HANDLE}`, {
-//       amount: { amount, currency: "USD" },
-//     });
-// ​
-//     const { data } = await apiInstance.post(`/invoices/${invoiceId}/quote`);
-//     const responsePayload = {
-//       invoiceId,
-//       ...data,
-//     };
-// ​
-//     res.status(200).json(responsePayload);
-//   } catch (error) {
-//     handleError(error, res);
-//   }
+  //   const {
+  //     body: { amount },
+  //   } = req;
+  // ​
+  //   try {
+  //     const {
+  //       data: { invoiceId },
+  //     } = await apiInstance.post(`/invoices/handle/${HANDLE}`, {
+  //       amount: { amount, currency: "USD" },
+  //     });
+  // ​
+  //     const { data } = await apiInstance.post(`/invoices/${invoiceId}/quote`);
+  //     const responsePayload = {
+  //       invoiceId,
+  //       ...data,
+  //     };
+  // ​
+  //     res.status(200).json(responsePayload);
+  //   } catch (error) {
+  //     handleError(error, res);
+  //   }
 }
-​
+
 export default apiRouteHandler;
