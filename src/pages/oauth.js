@@ -27,11 +27,12 @@ export async function getServerSideProps(context) {
   };
 
   try {
-    const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
-      grant_type: "authorization_code",
-      ...vals,
-    });
+    // const data = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
+    //   grant_type: "authorization_code",
+    //   ...vals,
+    // });
 
+    const data = {};
     return {
       props: { data },
     };
@@ -54,3 +55,5 @@ export async function getServerSideProps(context) {
   // const data = await res.json();
   // return { props: { user: data } };
 }
+
+// https://ln-streamlabs-donations.vercel.app/oauth?code=gn9w0RkJB358siF9auxZjiwhMSyFhV4Lg8a0KGsg
