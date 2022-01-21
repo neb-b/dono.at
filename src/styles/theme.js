@@ -30,9 +30,16 @@ const theme = {
   },
   buttons: {
     primary: {
+      height: "52px",
       cursor: "pointer",
-      color: "white",
+      color: "black",
       bg: "black",
+      borderRadius: "30px",
+      backgroundColor: "#CCFF00",
+      fontWeight: "bold",
+      px: 4,
+      py: 3,
+      fontSize: 3,
     },
   },
   forms: {

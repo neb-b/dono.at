@@ -2,16 +2,17 @@ import axios from "axios";
 import React from "react";
 import { useRouter } from "next/router";
 import Tip from "components/Tip";
+import { Box } from "rebass/styled-components";
 
 import { getProfileData } from "../lib/db";
 
 export default function TipPage(props) {
   // console.log("props", props);
   return (
-    <div>
+    <Box maxWidth={460} mx="auto">
       <h1>{props.username}</h1>
       <Tip />
-    </div>
+    </Box>
   );
 }
 

@@ -1,38 +1,55 @@
-import axios from "axios";
-import QRCode from "qrcode.react";
-import React from "react";
-import { Box, Text } from "rebass/styled-components";
+import { useEffect, useRef } from "react";
+import qrCodeConfig from "./qrCodeConfig";
+import styles from "./QRCode.module.css";
 
-function QR({ lnInvoice, invoiceId, expires, handleDonate }) {
-  const isExpired = expires <= 0;
-  if (!lnInvoice) {
-    return null;
-  }
+export default function QRCode({ data, expired, animationDuration, onClick }) {
+  const ref = useRef();
 
-  React.useEffect(() => {
-    if (!isExpired) {
-      let interval = setInterval(() => {
-        axios
-          .get(`/api/${invoiceId}`)
-          .then(({ data }) => {
-            if (data.state === "PAID") {
-              clearInterval(interval);
-              handleDonate();
-            }
-          })
-          .catch((err) => {
-            console.error("err", err);
-          });
-      }, 1000);
-    }
-  }, [expires, invoiceId, handleDonate, isExpired]);
+  useEffect(() => {
+    qrCodeConfig.append(ref.current);
+  }, []);
+
+  useEffect(() => {
+    qrCodeConfig.update({ data });
+  }, [data]);
 
   return (
-    <Box>
-      <QRCode size={200} value={lnInvoice} />
-      {expires && <Text>Expires in {expires} seconds</Text>}
-    </Box>
+    <div className={styles.root}>
+      <div className={styles.svgBorderContainer} onClick={onClick}>
+        <svg width="240px" height="240px" viewBox="0 0 240 240">
+          <rect
+            x="2"
+            y="2"
+            width="236"
+            height="236"
+            fill="none"
+            stroke="#CCFF00"
+            strokeWidth="4"
+            rx="28"
+          />
+        </svg>
+        <svg width="240px" height="240px" viewBox="0 0 240 240">
+          <rect
+            x="2"
+            y="2"
+            width="236"
+            height="236"
+            fill="none"
+            stroke="#1A1A1A"
+            strokeWidth="6"
+            strokeDashoffset={960}
+            strokeDasharray={960}
+            rx="28"
+            style={{ animationDuration: `${animationDuration}s` }}
+          />
+        </svg>
+      </div>
+      <div
+        className={`${styles.qrCodeContainer} ${
+          expired ? styles.expired : undefined
+        }`}
+        ref={ref}
+      />
+    </div>
   );
 }
-
-export default QR;
