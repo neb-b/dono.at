@@ -3,7 +3,7 @@ import QRCode from "qrcode.react";
 import React from "react";
 import { Box, Text } from "rebass/styled-components";
 
-function QR({ lnInvoice, invoiceId, expires }) {
+function QR({ lnInvoice, invoiceId, expires, handleDonate }) {
   const isExpired = expires <= 0;
   if (!lnInvoice) {
     return null;
@@ -16,7 +16,8 @@ function QR({ lnInvoice, invoiceId, expires }) {
           .get(`/api/${invoiceId}`)
           .then(({ data }) => {
             if (data.state === "PAID") {
-              // setPaid()
+              clearInterval(interval);
+              handleDonate();
             }
           })
           .catch((err) => {
@@ -24,7 +25,7 @@ function QR({ lnInvoice, invoiceId, expires }) {
           });
       }, 1000);
     }
-  }, [expires, invoiceId]);
+  }, [expires, invoiceId, handleDonate, isExpired]);
 
   return (
     <Box>

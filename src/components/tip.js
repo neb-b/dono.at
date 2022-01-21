@@ -6,13 +6,25 @@ import QR from "./QR";
 
 export default function Tip({ username }) {
   const [amount, setAmount] = React.useState(0.1);
-  const [from, setFrom] = React.useState("");
+  const [from, setFrom] = React.useState("satoshi");
   const [message, setMessage] = React.useState("");
   const [invoiceData, setInvoiceData] = React.useState();
   const [expires, setExpires] = React.useState();
 
   async function handleSubmit() {
     const { data } = await axios.post("/api/invoice", { username, amount });
+    console.log("data", data);
+    setExpires(data.expirationInSec);
+    setInvoiceData(data);
+  }
+
+  async function handleDonate() {
+    const { data } = await axios.post("/api/alert", {
+      username,
+      amount,
+      from,
+      message,
+    });
     console.log("data", data);
     setExpires(data.expirationInSec);
     setInvoiceData(data);
@@ -33,7 +45,7 @@ export default function Tip({ username }) {
           <Text>{amount}</Text>
           <Text>{from}</Text>
           <Text>{message}</Text>
-          <QR {...invoiceData} expires={expires} />
+          <QR {...invoiceData} expires={expires} handleDonate={handleDonate} />
         </Box>
       )}
       {!invoiceData && (
@@ -56,9 +68,10 @@ export default function Tip({ username }) {
               onChange={(e) => setFrom(e.target.value)}
               id="donation_from"
               name="donation_from"
-              placeholder="1.23"
+              placeholder="satoshi"
               fontSize={4}
               autocomplete="off"
+              value={from}
             />
           </Box>
           <Box mt={3}>
