@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Box } from "rebass/styled-components";
-import { createOrUpdateUser } from "../firebase/db";
+import { createOrUpdateUser } from "../lib/db";
 
 export default function Home(props) {
   // console.log("props", props);
@@ -21,21 +21,21 @@ export async function getServerSideProps(context) {
 
   try {
     // const access_token = "SbBk6oPNQidxDMQj795sS8FUWvapqgTMDD7HwaPd";
-    const {
-      data: { access_token },
-    } = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
-      grant_type: "authorization_code",
-      client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
-      client_secret: process.env.STREAMLABS_CLIENT_SECRET,
-      redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
-      code: streamLabsCode,
-    });
+    // const {
+    //   data: { access_token },
+    // } = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
+    //   grant_type: "authorization_code",
+    //   client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
+    //   client_secret: process.env.STREAMLABS_CLIENT_SECRET,
+    //   redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
+    //   code: streamLabsCode,
+    // });
 
-    const {
-      data: { streamlabs },
-    } = await axios.get(
-      `https://streamlabs.com/api/v1.0/user?access_token=${access_token}`
-    );
+    // const {
+    //   data: { streamlabs },
+    // } = await axios.get(
+    //   `https://streamlabs.com/api/v1.0/user?access_token=${access_token}`
+    // );
 
     await createOrUpdateUser({ ...streamlabs, access_token });
 

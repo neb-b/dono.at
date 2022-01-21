@@ -1,5 +1,4 @@
 import admin from "firebase-admin";
-console.log("INTIALIZING ADMIN");
 const config = {
   type: "service_account",
   project_id: "ln-streamlabs-do",
