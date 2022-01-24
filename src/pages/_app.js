@@ -8,7 +8,7 @@ import "styles/globals.css";
 export const UserContext = React.createContext();
 
 function MyApp({ Component, pageProps }) {
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState({});
 
   return (
     <UserContext.Provider value={{ setUser, user }}>

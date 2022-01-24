@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <Flex alignItems="flex-end" justifyContent="space-between" py={4}>
       <Heading>TBD</Heading>
-      {user && !user.isLoggedIn && (
+      {!user.isLoggedIn && (
         <Link href={STREAM_LABS_AUTH}>
           <Button
             variant="primary"

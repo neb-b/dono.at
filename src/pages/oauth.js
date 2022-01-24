@@ -19,37 +19,36 @@ export async function getServerSideProps(context) {
   const { code: streamLabsCode } = context.query;
 
   try {
-    // const {
-    //   data: { access_token },
-    // } = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
-    //   grant_type: "authorization_code",
-    //   client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
-    //   client_secret: process.env.STREAMLABS_CLIENT_SECRET,
-    //   redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
-    //   code: streamLabsCode,
-    // });
-
-    // const {
-    //   data: { streamlabs },
-    // } = await axios.get(
-    //   `https://streamlabs.com/api/v1.0/user?access_token=${access_token}`
-    // );
-
-    await createOrUpdateUser({
-      // ...streamlabs,
-      // access_token,
+    const {
+      data: { access_token },
+    } = await axios.post(`https://streamlabs.com/api/v1.0/token`, {
+      grant_type: "authorization_code",
+      client_id: process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID,
+      client_secret: process.env.STREAMLABS_CLIENT_SECRET,
+      redirect_uri: process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI,
+      code: streamLabsCode,
     });
 
-    // const authToken = jwt.sign({ access_token }, process.env.JWT_SECRET);
+    const {
+      data: { streamlabs },
+    } = await axios.get(
+      `https://streamlabs.com/api/v1.0/user?access_token=${access_token}`
+    );
 
-    // await addAuthToken({
-    //   authToken,
-    //   username: streamlabs.username,
-    // });
+    await createOrUpdateUser({
+      ...streamlabs,
+      access_token,
+    });
 
-    // context.res.setHeader("set-cookie", `auth_token=${authToken}`);
+    const authToken = jwt.sign({ access_token }, process.env.JWT_SECRET);
 
-    return { props: {} };
+    await addAuthToken({
+      authToken,
+      username: streamlabs.username,
+    });
+
+    context.res.setHeader("set-cookie", `auth_token=${authToken}`);
+
     return {
       redirect: { destination: `/${streamlabs.username}`, permanent: false },
     };
