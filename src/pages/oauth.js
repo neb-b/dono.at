@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Box } from "rebass/styled-components";
 import jwt from "jsonwebtoken";
-import { createOrUpdateUser, addAuthToken } from "../lib/db";
+import { createOrUpdateUser } from "../lib/db";
 
 export default function Home(props) {
   return (
