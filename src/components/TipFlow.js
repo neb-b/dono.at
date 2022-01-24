@@ -1,13 +1,15 @@
 import React from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import { Label, Input, Textarea } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
 const QRCode = dynamic(() => import("./QR"), { ssr: false });
 
-export default function Tip({ username, tip_min, thumbnail }) {
+export default function Tip({ username, tip_min, thumbnail, isLoggedIn }) {
+  const router = useRouter();
   const [amount, setAmount] = React.useState(tip_min);
   const [tipAmountError, setTipAmountError] = React.useState(false);
   const [from, setFrom] = React.useState("");
@@ -175,6 +177,20 @@ export default function Tip({ username, tip_min, thumbnail }) {
 
               <Box mt={3}>
                 <Button onClick={generateInvoice}>Submit</Button>
+                {isLoggedIn && (
+                  <Button
+                    variant="secondary"
+                    ml={2}
+                    onClick={() =>
+                      router.push({
+                        pathname: router.query.username,
+                        query: {},
+                      })
+                    }
+                  >
+                    Edit Your Info
+                  </Button>
+                )}
               </Box>
             </>
           )}

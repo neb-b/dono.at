@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import { Label, Input, Textarea } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
@@ -8,6 +9,7 @@ import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 import { UserContext } from "pages/_app";
 
 export default function Tip({ username }) {
+  const router = useRouter();
   const { user: apiUser, setUser } = React.useContext(UserContext);
   const [strikeUsername, setStrikeUsername] = React.useState("");
   const [tipAmount, setTipAmount] = React.useState("");
@@ -68,7 +70,21 @@ export default function Tip({ username }) {
         </Box>
 
         <Box mt={4}>
-          <Button onClick={submitUser}>Save</Button>
+          <Flex>
+            <Button onClick={submitUser}>Save</Button>
+            <Button
+              variant="secondary"
+              ml={2}
+              onClick={() =>
+                router.push({
+                  pathname: router.pathname,
+                  query: { ...router.query, view: "tip" },
+                })
+              }
+            >
+              View as Guest
+            </Button>
+          </Flex>
           {success && (
             <Box mt={3}>
               <Text>Successfully updated</Text>

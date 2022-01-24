@@ -1,6 +1,6 @@
 import axios from "axios";
 import { v4 as uuid } from "uuid";
-import { getUser } from "../../lib/db";
+import { getUser, logTx } from "../../lib/db";
 
 async function apiRouteHandler(req, res) {
   const {
@@ -21,6 +21,9 @@ async function apiRouteHandler(req, res) {
         name: from,
       }
     );
+
+    await logTx({ amount, username, message, date: Date.now() });
+
     res.status(200).json({ data });
   } catch (error) {
     console.log(error);

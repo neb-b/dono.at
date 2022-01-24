@@ -166,3 +166,21 @@ export async function getUser(username) {
     }
   });
 }
+
+export async function logTx({ amount, username, message, date }) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const txRef = db.ref(`txs/${uuidv4()}`);
+      await txRef.set({
+        amount,
+        message,
+        date,
+        username,
+      });
+
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}

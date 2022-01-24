@@ -33,16 +33,7 @@ export default function Header() {
       </Link>
       {!user.isLoggedIn && (
         <Link href={STREAM_LABS_AUTH}>
-          <Button
-            variant="secondary"
-            mt={2}
-            onClick={() =>
-              router.push({
-                pathname: router.pathname,
-                query: { ...router.query, type: "streamlabs" },
-              })
-            }
-          >
+          <Button variant="secondary" mt={2}>
             Login with Streamlabs
           </Button>
         </Link>
