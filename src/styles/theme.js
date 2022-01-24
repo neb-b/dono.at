@@ -52,7 +52,7 @@ const buttonFontStyle = {
 
 const theme = {
   fonts: {
-    body: "system-ui, sans-serif",
+    body: "Montserrat, Futura, system-ui, sans-serif",
   },
   colors: {
     primaryText: "white",
@@ -81,6 +81,7 @@ const theme = {
     input: {
       normal: {
         ...inputStyles,
+        fontWeight: "bold",
       },
     },
 
