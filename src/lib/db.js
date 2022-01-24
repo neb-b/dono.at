@@ -6,20 +6,22 @@ import db from "./firebase-admin";
 const usersRef = db.ref("users");
 
 const verifyAuthToken = (authToken, accessToken) => {
-  let decodedAuthToken;
-  if (authToken) {
-    jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return false;
-      }
-
-      decodedAuthToken = decoded;
-    });
-
-    return decodedAuthToken
-      ? decodedAuthToken.access_token === accessToken
-      : false;
+  if (!authToken) {
+    return false;
   }
+
+  let decodedAuthToken;
+  jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return false;
+    }
+
+    decodedAuthToken = decoded;
+  });
+
+  return decodedAuthToken
+    ? decodedAuthToken.access_token === accessToken
+    : false;
 };
 
 export async function createOrUpdateUser({
