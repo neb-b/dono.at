@@ -1,13 +1,22 @@
+import React from "react";
 import { ThemeProvider } from "styled-components";
 
+import Header from "components/Header";
 import theme from "styles/theme";
 import "styles/globals.css";
 
+export const UserContext = React.createContext();
+
 function MyApp({ Component, pageProps }) {
+  const [user, setUser] = React.useState();
+
   return (
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <UserContext.Provider value={{ setUser, user }}>
+      <ThemeProvider theme={theme}>
+        <Header />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </UserContext.Provider>
   );
 }
 

@@ -1,30 +1,21 @@
 import { v4 as uuidv4 } from "uuid";
 import { getDatabase } from "firebase-admin/database";
+import jwt from "jsonwebtoken";
 import db from "./firebase-admin";
 
 const usersRef = db.ref("users");
 const authRef = db.ref("auth");
 
-// var db = admin.database();
-// var ref = db.ref("restricted_access/secret_document");
-// ref.once("value", function (snapshot) {
-//   console.log(snapshot.val());
-// });
-//
-//
-// User
-//
-//
 export async function createOrUpdateUser({
   access_token,
-  username,
+  username = "cheese__omelette",
   display_name,
   thumbnail,
 }) {
   const userRef = db.ref(`users/${username}`);
 
   try {
-    usersRef.set(
+    await usersRef.set(
       {
         [username]: {
           access_token,
@@ -32,10 +23,36 @@ export async function createOrUpdateUser({
           display_name,
         },
       },
-      (error) => {
-        if (error) {
-          console.log("error?", error);
+      (err) => {
+        if (err) {
+          throw err;
         }
+      }
+    );
+
+    await userRef.on(
+      "value",
+      (snapshot) => {
+        console.log("snapshot", snapshot.val());
+        const user = snapshot.val();
+
+        if (user && !user.tip_min) {
+          await usersRef.set(
+            {
+              [username]: {
+                tip_min: 0.1,
+              },
+            },
+            (err) => {
+              if (err) {
+                throw err;
+              }
+            }
+          );
+        }
+      },
+      (err) => {
+        throw err;
       }
     );
   } catch (error) {
@@ -61,7 +78,7 @@ export async function addAuthToken({ authToken, username }) {
   }
 }
 
-export async function getProfileData(username) {
+export async function getProfileData(username, authToken) {
   return new Promise((resolve, reject) => {
     try {
       const userRef = db.ref(`users`);
@@ -72,10 +89,29 @@ export async function getProfileData(username) {
           // How to get the single item from the db instead of all of them
           //
           const users = snapshot.val();
-          const data = users.cheese__omelette;
+          const data = users[username];
 
           if (data) {
             const { access_token, strike_username, ...user } = data;
+
+            let decodedAuthToken;
+            if (authToken) {
+              jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
+                if (err) {
+                  throw err;
+                }
+
+                decodedAuthToken = decoded;
+                console.log("decoded", decoded);
+              });
+
+              if (decodedAuthToken.access_token === access_token) {
+                user.isLoggedIn = true;
+              } else {
+                user.isLoggedIn = false;
+              }
+            }
+
             resolve(user);
           } else {
             reject();

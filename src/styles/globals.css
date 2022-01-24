@@ -3,6 +3,7 @@ body {
   padding: 0;
   margin: 0;
   padding: 2rem;
+  padding-top: 0;
   background-color: black;
   color: white;
 }

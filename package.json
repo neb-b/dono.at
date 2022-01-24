@@ -11,6 +11,7 @@
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
     "axios": "^0.25.0",
+    "cookie": "^0.4.1",
     "debug-logger": "^0.4.1",
     "firebase": "^9.6.3",
     "firebase-admin": "^10.0.1",
