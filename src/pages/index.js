@@ -12,11 +12,11 @@ export default function Home() {
             Receive Lightning tips live on stream
           </Text>
 
-          <Link href="/cheese__omelette">
-            <Button variant="primary" mt={4}>
-              View Example Tip Page
-            </Button>
-          </Link>
+          <Button variant="primary" mt={4}>
+            <Link href="/cheese__omelette">
+              <a>View Example Tip Page</a>
+            </Link>
+          </Button>
         </Box>
         <Box mt={[4, 0]}>
           <Image src={DonationImage} alt="" height={300} width={450} />
