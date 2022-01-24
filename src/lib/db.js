@@ -3,6 +3,7 @@ import { getDatabase } from "firebase-admin/database";
 import db from "./firebase-admin";
 
 const usersRef = db.ref("users");
+const authRef = db.ref("auth");
 
 // var db = admin.database();
 // var ref = db.ref("restricted_access/secret_document");
@@ -42,10 +43,10 @@ export async function createOrUpdateUser({
   }
 }
 export async function addAuthToken({ authToken, username }) {
-  const userRef = db.ref(`auth/${username}`);
+  const authRef = db.ref(`auth/${username}`);
 
   try {
-    await usersRef.set(
+    await authRef.set(
       {
         [username]: {
           auth_token: authToken,
