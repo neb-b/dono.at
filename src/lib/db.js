@@ -41,6 +41,26 @@ export async function createOrUpdateUser({
     console.log("here?\n\n", error, "\n\n");
   }
 }
+export async function addAuthToken({ authToken, username }) {
+  const userRef = db.ref(`auth/${username}`);
+
+  try {
+    await usersRef.set(
+      {
+        [username]: {
+          auth_token: authToken,
+        },
+      },
+      (error) => {
+        if (error) {
+          console.log("error?", error);
+        }
+      }
+    );
+  } catch (error) {
+    console.log("here?\n\n", error, "\n\n");
+  }
+}
 
 export async function getProfileData(username) {
   return new Promise((resolve, reject) => {
