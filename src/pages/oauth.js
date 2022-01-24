@@ -55,8 +55,13 @@ export async function getServerSideProps(context) {
 
     context.res.setHeader("set-cookie", `auth_token=${authToken}`);
 
+    return { props: { authToken } };
+
     return {
-      redirect: { destination: `/${streamlabs.username}`, permanent: false },
+      redirect: {
+        destination: `/${streamlabs.username}`,
+        permanent: false,
+      },
     };
   } catch (error) {
     console.log("data", error);
