@@ -36,7 +36,7 @@ export async function getServerSideProps(context) {
   const { auth_token } = cookie.parse(context.req.headers.cookie || "");
 
   // wtf is this
-  const ignored = ["requestProvider.js.map"];
+  const ignored = ["requestProvider.js.map", "favicon.ico"];
   if (ignored.includes(username)) {
     return { props: {} };
   }
