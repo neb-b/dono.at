@@ -8,7 +8,7 @@ import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
 const QRCode = dynamic(() => import("./QR"), { ssr: false });
 
-export default function Tip({ username, tip_min, thumbnail, isLoggedIn }) {
+export default function Tip({ username, tip_min, isLoggedIn }) {
   const router = useRouter();
   const [amount, setAmount] = React.useState(tip_min);
   const [tipAmountError, setTipAmountError] = React.useState(false);

@@ -3,8 +3,9 @@ import React from "react";
 import { useRouter } from "next/router";
 import Tip from "components/TipFlow";
 import Edit from "components/EditFlow";
-import { Box } from "rebass/styled-components";
+import { Text, Box, Flex } from "rebass/styled-components";
 import * as cookie from "cookie";
+import Image from "next/image";
 
 import { getProfileData } from "../lib/db";
 
@@ -25,7 +26,25 @@ export default function TipPage({ username, apiUser }) {
     <Box maxWidth={460} mx="auto">
       {user && user.isLoggedIn !== undefined && (
         <>
-          <h1>{username}</h1>
+          <Flex mb={2} alignItems="center">
+            <Box
+              sx={{
+                img: {
+                  borderRadius: 10,
+                },
+              }}
+            >
+              <Image
+                alt="Profile picture"
+                height={75}
+                width={75}
+                src={user.thumbnail}
+              />
+            </Box>
+            <Text fontSize={24} ml={2}>
+              {username}
+            </Text>
+          </Flex>
           {user.isLoggedIn && !view ? (
             <Edit username={username} {...user} />
           ) : (
