@@ -10,13 +10,15 @@ const verifyAuthToken = (authToken, accessToken) => {
   if (authToken) {
     jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        throw err;
+        return false;
       }
 
       decodedAuthToken = decoded;
     });
 
-    return decodedAuthToken.access_token === accessToken;
+    return decodedAuthToken
+      ? decodedAuthToken.access_token === accessToken
+      : false;
   }
 };
 
@@ -118,7 +120,6 @@ export async function getProfileData(username, authToken) {
 
         const isLoggedIn = verifyAuthToken(authToken, access_token);
         user.isLoggedIn = isLoggedIn;
-
         if (isLoggedIn) {
           return resolve({ ...user, strike_username });
         }
@@ -128,6 +129,7 @@ export async function getProfileData(username, authToken) {
         reject();
       }
     } catch (error) {
+      console.log("error??", error);
       reject(error);
     }
   });

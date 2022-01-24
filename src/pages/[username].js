@@ -19,7 +19,13 @@ export default function TipPage({ username, apiUser }) {
 
   const apiUserData = JSON.stringify(apiUser);
   React.useEffect(() => {
-    setUser(JSON.parse(apiUserData));
+    let userData;
+    try {
+      userData = JSON.parse(apiUserData);
+      setUser(userData);
+    } catch (e) {
+      // redirect to 404
+    }
   }, [apiUserData, setUser]);
 
   return (

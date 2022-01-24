@@ -32,14 +32,14 @@ export default function Header() {
           ln-tips
         </Text>
       </Link>
-      {!user.isLoggedIn && (
-        <Button variant="secondary" mt={2}>
-          <Link href={STREAM_LABS_AUTH} passHref>
-            <a>
+      {user.isLoggedIn !== undefined && !user.isLoggedIn && (
+        <Link href={STREAM_LABS_AUTH}>
+          <a>
+            <Button variant="secondary" mt={2}>
               <Text display={["none", "block"]}></Text>Login with Streamlabs
-            </a>
-          </Link>
-        </Button>
+            </Button>
+          </a>
+        </Link>
       )}
     </Flex>
   );
