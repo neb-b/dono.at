@@ -32,7 +32,7 @@ export async function createOrUpdateUser({
 
     await userRef.on(
       "value",
-      (snapshot) => {
+      async (snapshot) => {
         console.log("snapshot", snapshot.val());
         const user = snapshot.val();
 
