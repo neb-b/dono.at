@@ -18,15 +18,18 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   const [expirationTime, setExpirationTime] = React.useState(0);
   const [expires, setExpires] = React.useState();
   const [paid, setPaid] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const invoiceId = invoiceData?.invoiceId;
   const isExpired = expires <= 0;
 
   async function generateInvoice() {
     setInvoiceData(null);
+    setLoading(true);
     const { data } = await axios.post("/api/invoice", { username, amount });
     setExpires(data.expirationInSec);
     setExpirationTime(data.expirationInSec);
     setInvoiceData(data);
+    setLoading(false);
   }
 
   const triggerAlert = React.useCallback(async () => {
@@ -144,6 +147,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                   )}
                 </Label>
                 <Input
+                  disabled={loading}
                   tx="forms.input"
                   variant="normal"
                   onChange={(e) => handleTipAmount(e.target.value)}
@@ -156,6 +160,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
               <Box mt={3}>
                 <Label htmlFor="donation_from">From</Label>
                 <Input
+                  disabled={loading}
                   tx="forms.input"
                   variant="normal"
                   onChange={(e) => setFrom(e.target.value)}
@@ -168,6 +173,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
               <Box mt={3}>
                 <Label htmlFor="donation_message">Message</Label>
                 <Textarea
+                  disabled={loading}
                   onChange={(e) => setMessage(e.target.value)}
                   name="donation_message"
                   placeholder="Hello"
@@ -176,21 +182,26 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
               </Box>
 
               <Box mt={3}>
-                <Button onClick={generateInvoice}>Submit</Button>
-                {isLoggedIn && (
-                  <Button
-                    variant="secondary"
-                    ml={2}
-                    onClick={() =>
-                      router.push({
-                        pathname: router.query.username,
-                        query: {},
-                      })
-                    }
-                  >
-                    Edit Your Info
+                <Flex flexDirection={["column", "row"]}>
+                  <Button disabled={loading} onClick={generateInvoice}>
+                    {loading ? "Submitting..." : "Submit"}
                   </Button>
-                )}
+                  {isLoggedIn && (
+                    <Button
+                      mt={[3, 0]}
+                      variant="secondary"
+                      ml={2}
+                      onClick={() =>
+                        router.push({
+                          pathname: router.query.username,
+                          query: {},
+                        })
+                      }
+                    >
+                      Edit Your Info
+                    </Button>
+                  )}
+                </Flex>
               </Box>
             </>
           )}

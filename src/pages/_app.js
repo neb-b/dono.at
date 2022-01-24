@@ -1,5 +1,6 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
+import { Box } from "rebass/styled-components";
 import Header from "components/Header";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/700.css";
@@ -14,8 +15,10 @@ function MyApp({ Component, pageProps }) {
   return (
     <UserContext.Provider value={{ setUser, user }}>
       <ThemeProvider theme={theme}>
-        <Header />
-        <Component {...pageProps} />
+        <Box px={[4]}>
+          <Header />
+          <Component {...pageProps} />
+        </Box>
       </ThemeProvider>
     </UserContext.Provider>
   );

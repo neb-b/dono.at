@@ -26,7 +26,7 @@ export default function TipPage({ username, apiUser }) {
     <Box maxWidth={460} mx="auto">
       {user && user.isLoggedIn !== undefined && (
         <>
-          <Flex mb={2} alignItems="center">
+          <Flex mb={4} alignItems="center">
             <Box
               sx={{
                 img: {
@@ -36,8 +36,8 @@ export default function TipPage({ username, apiUser }) {
             >
               <Image
                 alt="Profile picture"
-                height={75}
-                width={75}
+                height={50}
+                width={50}
                 src={user.thumbnail}
               />
             </Box>

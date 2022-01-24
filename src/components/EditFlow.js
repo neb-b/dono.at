@@ -70,11 +70,12 @@ export default function Tip({ username }) {
         </Box>
 
         <Box mt={4}>
-          <Flex>
+          <Flex flexDirection={["column", "row"]}>
             <Button onClick={submitUser}>Save</Button>
             <Button
               variant="secondary"
               ml={2}
+              mt={[3, 0]}
               onClick={() =>
                 router.push({
                   pathname: router.pathname,
