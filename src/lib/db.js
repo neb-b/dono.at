@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import db from "./firebase-admin";
 
 const usersRef = db.ref("users");
-const authRef = db.ref("auth");
 
 const verifyAuthToken = (authToken, accessToken) => {
   let decodedAuthToken;
@@ -54,25 +53,6 @@ export async function createOrUpdateUser({
     console.log(err);
   }
 }
-
-// export async function addAuthToken({ authToken, username }) {
-//   try {
-//     await authRef.set(
-//       {
-//         [username]: {
-//           auth_token: authToken,
-//         },
-//       },
-//       (err) => {
-//         if (err) {
-//           throw err;
-//         }
-//       }
-//     );
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
 
 export async function updateUserData(
   username,
