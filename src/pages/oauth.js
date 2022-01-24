@@ -19,6 +19,12 @@ export async function getServerSideProps(context) {
   const { code: streamLabsCode } = context.query;
 
   try {
+    // await createOrUpdateUser({
+    //   streamlabs: {},
+    // });
+
+    // return { props: {} };
+
     const {
       data: { access_token },
     } = await axios.post(`https://streamlabs.com/api/v1.0/token`, {

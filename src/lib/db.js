@@ -15,44 +15,28 @@ export async function createOrUpdateUser({
   const userRef = db.ref(`users/${username}`);
 
   try {
-    await usersRef.set(
-      {
-        [username]: {
+    let dbUser = await userRef.once("value");
+    const newUser = dbUser === null;
+    const userSetPayload = newUser
+      ? {
           access_token,
           thumbnail,
           display_name,
-        },
+          tip_min: 0.1,
+        }
+      : {
+          ...dbUser,
+          access_token,
+        };
+
+    await usersRef.set(
+      {
+        [username]: userSetPayload,
       },
       (err) => {
         if (err) {
           throw err;
         }
-      }
-    );
-
-    await userRef.on(
-      "value",
-      async (snapshot) => {
-        console.log("snapshot", snapshot.val());
-        const user = snapshot.val();
-
-        if (user && !user.tip_min) {
-          await usersRef.set(
-            {
-              [username]: {
-                tip_min: 0.1,
-              },
-            },
-            (err) => {
-              if (err) {
-                throw err;
-              }
-            }
-          );
-        }
-      },
-      (err) => {
-        throw err;
       }
     );
   } catch (error) {
