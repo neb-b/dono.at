@@ -63,49 +63,39 @@ export async function addAuthToken({ authToken, username }) {
 }
 
 export async function getProfileData(username, authToken) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    const userRef = db.ref(`users/${username}`);
+
     try {
-      const userRef = db.ref(`users`);
-      userRef.on(
-        "value",
-        (snapshot) => {
-          //
-          // How to get the single item from the db instead of all of them
-          //
-          const users = snapshot.val();
-          const data = users[username];
+      const dbUserSnapShot = await userRef.once("value");
+      const dbUser = dbUserSnapShot.val();
 
-          if (data) {
-            const { access_token, strike_username, ...user } = data;
+      console.log("user", dbUser);
+      if (dbUser) {
+        const { access_token, strike_username, ...user } = dbUser;
 
-            let decodedAuthToken;
-            if (authToken) {
-              jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
-                if (err) {
-                  throw err;
-                }
-
-                decodedAuthToken = decoded;
-                console.log("decoded", decoded);
-              });
-
-              if (decodedAuthToken.access_token === access_token) {
-                user.isLoggedIn = true;
-              } else {
-                user.isLoggedIn = false;
-              }
+        let decodedAuthToken;
+        if (authToken) {
+          jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+              throw err;
             }
 
-            resolve(user);
+            decodedAuthToken = decoded;
+            console.log("decoded", decoded);
+          });
+
+          if (decodedAuthToken.access_token === access_token) {
+            user.isLoggedIn = true;
           } else {
-            reject();
+            user.isLoggedIn = false;
           }
-        },
-        (error) => {
-          console.log("The read failed: " + error.name);
-          reject(error);
         }
-      );
+
+        resolve(user);
+      } else {
+        reject();
+      }
     } catch (error) {
       reject(error);
     }

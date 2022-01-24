@@ -43,6 +43,11 @@ export async function getServerSideProps(context) {
 
   try {
     const user = await getProfileData(username, auth_token);
+    if (!user) {
+      return { redirects: { destination: "/404", permanent: false } };
+    }
+
+    // console.log("user", user);
     return {
       props: { username, apiUser: user || undefined },
     };
