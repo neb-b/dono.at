@@ -27,9 +27,9 @@ export default function TipPage({ username, apiUser }) {
         <>
           <h1>{username}</h1>
           {user.isLoggedIn && !view ? (
-            <Edit username={username} />
+            <Edit username={username} {...user} />
           ) : (
-            <Tip username={username} />
+            <Tip username={username} {...user} />
           )}
         </>
       )}

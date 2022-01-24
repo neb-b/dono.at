@@ -7,9 +7,10 @@ import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
 const QRCode = dynamic(() => import("./QR"), { ssr: false });
 
-export default function Tip({ username }) {
-  const [amount, setAmount] = React.useState(0.1);
-  const [from, setFrom] = React.useState("satoshi");
+export default function Tip({ username, tip_min, thumbnail }) {
+  const [amount, setAmount] = React.useState(tip_min);
+  const [tipAmountError, setTipAmountError] = React.useState(false);
+  const [from, setFrom] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [invoiceData, setInvoiceData] = React.useState();
   const [expirationTime, setExpirationTime] = React.useState(0);
@@ -30,10 +31,22 @@ export default function Tip({ username }) {
     await axios.post("/api/alert", {
       username,
       amount,
-      from,
+      from: from || "Anonymous",
       message,
     });
   }, [username, amount, from, message]);
+
+  const handleTipAmount = (newVal) => {
+    if (newVal < tip_min) {
+      setTipAmountError(
+        "Tip amount must be at least $" + Number(tip_min).toFixed(2)
+      );
+    } else {
+      setTipAmountError(false);
+    }
+
+    setAmount(newVal);
+  };
 
   React.useEffect(() => {
     let interval;
@@ -101,7 +114,7 @@ export default function Tip({ username }) {
               </Box>
               <Box ml={[0, 4]} mt={[4, 0]}>
                 <Text fontSize={4}>
-                  Tipping <Text color="api">${amount.toFixed(2)}</Text>
+                  Tipping <Text color="api">${Number(amount).toFixed(2)}</Text>
                 </Text>
                 <Text mt={2} fontSize={3}>
                   From <Text fontWeight="normal">{from || "Anonymous"}</Text>
@@ -120,11 +133,18 @@ export default function Tip({ username }) {
           {!invoiceData && (
             <>
               <Box>
-                <Label htmlFor="donation_amount">Amount</Label>
+                <Label htmlFor="donation_amount">
+                  Amount{" "}
+                  {tipAmountError && (
+                    <Text color="red" fontWeight="normal" fontSize={2} ml={3}>
+                      {tipAmountError}
+                    </Text>
+                  )}
+                </Label>
                 <Input
                   tx="forms.input"
                   variant="normal"
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => handleTipAmount(e.target.value)}
                   name="donation_amount"
                   placeholder="1.23"
                   autocomplete="off"
