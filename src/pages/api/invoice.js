@@ -4,12 +4,16 @@ import { createInvoice } from "../../lib/strike";
 
 async function handler(req, res) {
   const {
-    body: { username, amount = 1 },
+    body: { username, amount },
   } = req;
 
   try {
     const { strike_username } = await getUser(username);
-    const data = await createInvoice({ username: strike_username, amount });
+    const data = await createInvoice({
+      username: strike_username,
+      amount,
+      streamer_username: username,
+    });
     res.status(200).json(data);
   } catch (error) {
     console.log("error", error);

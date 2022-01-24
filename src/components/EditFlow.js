@@ -78,7 +78,7 @@ export default function Tip({ username }) {
               mt={[3, 0]}
               onClick={() =>
                 router.push({
-                  pathname: router.pathname,
+                  pathname: router.query.username,
                   query: { ...router.query, view: "tip" },
                 })
               }

@@ -25,7 +25,10 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   async function generateInvoice() {
     setInvoiceData(null);
     setLoading(true);
-    const { data } = await axios.post("/api/invoice", { username, amount });
+    const { data } = await axios.post("/api/invoice", {
+      username,
+      amount,
+    });
     setExpires(data.expirationInSec);
     setExpirationTime(data.expirationInSec);
     setInvoiceData(data);
