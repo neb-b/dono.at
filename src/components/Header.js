@@ -17,11 +17,24 @@ export default function Header() {
 
   return (
     <Flex alignItems="flex-end" justifyContent="space-between" py={4}>
-      <Heading>TBD</Heading>
+      <Link href="/" style={{ textDecoration: "none" }}>
+        <Text
+          fontWeight="bold"
+          color="white"
+          fontSize={48}
+          sx={{
+            ":hover": {
+              textDecoration: "underline",
+            },
+          }}
+        >
+          ln-tips
+        </Text>
+      </Link>
       {!user.isLoggedIn && (
         <Link href={STREAM_LABS_AUTH}>
           <Button
-            variant="primary"
+            variant="secondary"
             mt={2}
             onClick={() =>
               router.push({

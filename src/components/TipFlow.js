@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
 
-import { Label, Input, Textarea } from "@rebass/forms";
+import { Label, Input, Textarea } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
 const QRCode = dynamic(() => import("./QR"), { ssr: false });
@@ -19,6 +19,7 @@ export default function Tip({ username }) {
   const isExpired = expires <= 0;
 
   async function generateInvoice() {
+    setInvoiceData(null);
     const { data } = await axios.post("/api/invoice", { username, amount });
     setExpires(data.expirationInSec);
     setExpirationTime(data.expirationInSec);
@@ -73,7 +74,7 @@ export default function Tip({ username }) {
   }, [expires, setExpires]);
 
   return (
-    <Box sx={{ maxWidth: "400px" }}>
+    <Box sx={{ maxWidth: "500px" }}>
       {paid && (
         <Box>
           <Text>Thank you for your tip!</Text>
@@ -82,18 +83,37 @@ export default function Tip({ username }) {
       {!paid && (
         <>
           {invoiceData && (
-            <Flex alignItems="center">
-              {invoiceId && (
+            <Flex
+              alignItems={["flex-start", "center"]}
+              flexDirection={["column", "row"]}
+            >
+              <Box>
                 <QRCode
                   expired={isExpired}
                   data={invoiceData.lnInvoice}
                   animationDuration={expirationTime}
                 />
-              )}
-              <Box ml={4}>
-                <Text fontWeight="bold">${amount.toFixed(2)}</Text>
-                <Text mt={2}>{from}</Text>
-                <Text mt={2}>{message}</Text>
+                {isExpired && (
+                  <Box mt={3}>
+                    <Button onClick={generateInvoice}>Refresh</Button>
+                  </Box>
+                )}
+              </Box>
+              <Box ml={[0, 4]} mt={[4, 0]}>
+                <Text fontSize={4}>
+                  Tipping <Text color="api">${amount.toFixed(2)}</Text>
+                </Text>
+                <Text mt={2} fontSize={3}>
+                  From <Text fontWeight="normal">{from || "Anonymous"}</Text>
+                </Text>
+                {message && (
+                  <>
+                    <Text mt={3}>Message</Text>
+                    <Text mt={2} fontWeight="normal">
+                      {message}
+                    </Text>
+                  </>
+                )}
               </Box>
             </Flex>
           )}
@@ -102,11 +122,11 @@ export default function Tip({ username }) {
               <Box>
                 <Label htmlFor="donation_amount">Amount</Label>
                 <Input
+                  tx="forms.input"
+                  variant="normal"
                   onChange={(e) => setAmount(e.target.value)}
-                  id="donation_amount"
                   name="donation_amount"
                   placeholder="1.23"
-                  fontSize={5}
                   autocomplete="off"
                   value={amount}
                 />
@@ -114,11 +134,11 @@ export default function Tip({ username }) {
               <Box mt={3}>
                 <Label htmlFor="donation_from">From</Label>
                 <Input
+                  tx="forms.input"
+                  variant="normal"
                   onChange={(e) => setFrom(e.target.value)}
-                  id="donation_from"
                   name="donation_from"
                   placeholder="satoshi"
-                  fontSize={4}
                   autocomplete="off"
                   value={from}
                 />
@@ -127,10 +147,8 @@ export default function Tip({ username }) {
                 <Label htmlFor="donation_message">Message</Label>
                 <Textarea
                   onChange={(e) => setMessage(e.target.value)}
-                  id="donation_message"
                   name="donation_message"
                   placeholder="Hello"
-                  fontSize={4}
                   autocomplete="off"
                 />
               </Box>

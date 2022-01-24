@@ -23,7 +23,7 @@ export default function TipPage({ username, apiUser }) {
 
   return (
     <Box maxWidth={460} mx="auto">
-      {user && (
+      {user && user.isLoggedIn !== undefined && (
         <>
           <h1>{username}</h1>
           {user.isLoggedIn && !view ? (

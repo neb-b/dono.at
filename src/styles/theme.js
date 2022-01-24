@@ -8,13 +8,46 @@ const fontStyles = {
 
 const inputStyles = {
   ...fontStyles,
+  mt: 1,
+  fontSize: "24px",
+  fontWeight: "normal",
+  height: "52px",
   borderWidth: 1,
-  borderStyle: "none",
-  borderColor: "primaryText",
   borderRadius: 10,
-  bg: "red",
+  width: "100%",
+  borderColor: "transparent",
+  bg: "#1c1c1e",
   width: "100%",
   cursor: "text",
+  outline: "none",
+  position: "relative",
+  "::-webkit-search-decoration:hover, ::-webkit-search-cancel-button:hover": {
+    cursor: "pointer",
+  },
+  "::placeholder": {
+    color: "gray18",
+  },
+  "&:disabled": {
+    bg: `rgba(235,235,245,0.3)`,
+    opacity: 0.6,
+  },
+  ":not(select)&:read-only": {
+    opacity: 0.6,
+  },
+  "&:focus": {
+    borderColor: "white",
+  },
+};
+
+const buttonFontStyle = {
+  letterSpacing: "-0.19px",
+  fontSize: 3,
+  fontWeight: "bold",
+  height: "52px",
+  cursor: "pointer",
+  borderRadius: "30px",
+  px: 4,
+  py: 3,
 };
 
 const theme = {
@@ -22,60 +55,45 @@ const theme = {
     body: "system-ui, sans-serif",
   },
   colors: {
-    primaryText: "red",
+    primaryText: "white",
     black: "#000e1a",
     white: "#fff",
     blue: "#007ce0",
     navy: "#004175",
+    api: "#CCFF00",
   },
   buttons: {
     primary: {
-      height: "52px",
-      cursor: "pointer",
+      ...buttonFontStyle,
       color: "black",
       bg: "black",
-      borderRadius: "30px",
       backgroundColor: "#CCFF00",
       fontWeight: "bold",
-      px: 4,
-      py: 3,
-      fontSize: 3,
+    },
+    secondary: {
+      ...buttonFontStyle,
+      cursor: "pointer",
+      color: "black",
+      backgroundColor: "white",
     },
   },
   forms: {
     input: {
       normal: {
         ...inputStyles,
-        px: 3,
-        height: 48,
-      },
-      thin: {
-        ...inputStyles,
-        px: 2,
-        height: 34,
       },
     },
 
     textarea: {
       ...inputStyles,
+      height: "100px",
       p: 3,
-    },
-
-    select: {
-      ...inputStyles,
-      height: 48,
-      option: {
-        outline: "none",
-        borderWidth: 1,
-        borderStyle: "none",
-        borderColor: "primaryText",
-        position: "relative",
-      },
     },
 
     label: {
       ...fontStyles,
       width: "auto",
+      fontWeight: "normal",
     },
   },
 };

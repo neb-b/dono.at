@@ -40,7 +40,7 @@ export default function QRCode({ data, expired, animationDuration, onClick }) {
             strokeDashoffset={960}
             strokeDasharray={960}
             rx="28"
-            style={{ animationDuration: `${animationDuration}s` }}
+            style={{ animationDuration: expired ? 0 : `${animationDuration}s` }}
           />
         </svg>
       </div>

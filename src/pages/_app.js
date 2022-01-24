@@ -1,7 +1,8 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
-
 import Header from "components/Header";
+import "@fontsource/montserrat/400.css";
+import "@fontsource/montserrat/700.css";
 import theme from "styles/theme";
 import "styles/globals.css";
 

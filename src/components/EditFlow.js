@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
 
-import { Label, Input, Textarea } from "@rebass/forms";
+import { Label, Input, Textarea } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
 import { UserContext } from "pages/_app";
@@ -43,29 +43,31 @@ export default function Tip({ username }) {
         <Box>
           <Label htmlFor="strike_username">Strike Username</Label>
           <Input
+            tx="forms.input"
+            variant="normal"
             onChange={(e) => setStrikeUsername(e.target.value)}
             id="strike_username"
             name="strike_username"
             placeholder="Strike Username"
-            fontSize={5}
             autocomplete="off"
             value={strikeUsername}
           />
         </Box>
-        <Box mt={3}>
+        <Box mt={4}>
           <Label htmlFor="tip_min">Minimum Tip Amount</Label>
           <Input
+            tx="forms.input"
+            variant="normal"
             onChange={(e) => setTipAmount(e.target.value)}
             id="tip_min"
             name="tip_min"
             placeholder="0.1"
-            fontSize={4}
             autocomplete="off"
             value={tipAmount}
           />
         </Box>
 
-        <Box mt={3}>
+        <Box mt={4}>
           <Button onClick={submitUser}>Save</Button>
           {success && (
             <Box mt={3}>
