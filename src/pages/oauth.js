@@ -31,7 +31,8 @@ export async function getServerSideProps(context) {
       code: streamLabsCode,
     });
 
-    console.log("??", access_token);
+    // const access_token = "HRgYMW718Y3oM0Otb3A3jJxp4BOGYSd4kazyPtbj";
+    // console.log("??", access_token);
 
     const {
       data,
@@ -40,7 +41,7 @@ export async function getServerSideProps(context) {
       `https://streamlabs.com/api/v1.0/user?access_token=${access_token}`
     );
 
-    console.log("data", data);
+    // console.log("data", data);
     const user = await createOrUpdateUser({
       ...streamlabs,
       access_token,
@@ -48,12 +49,16 @@ export async function getServerSideProps(context) {
 
     const authToken = jwt.sign({ access_token }, process.env.JWT_SECRET);
 
-    const auth = await addAuthToken({
+    console.log("auth", authToken);
+    await addAuthToken({
       authToken,
-      username: streamlabs.username,
+      username: "cheese__omelette" || streamlabs.username,
     });
 
+    context.res.setHeader("set-cookie", `auth_token=${authToken}`);
+
     return {
+      // props: { streamlabs: { username: "streamlabs" } },
       props: { streamlabs },
     };
   } catch (error) {

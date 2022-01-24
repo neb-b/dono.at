@@ -43,8 +43,6 @@ export async function createOrUpdateUser({
   }
 }
 export async function addAuthToken({ authToken, username }) {
-  const authRef = db.ref(`auth/${username}`);
-
   try {
     await authRef.set(
       {
