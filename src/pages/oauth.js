@@ -41,6 +41,7 @@ export async function getServerSideProps(context) {
       `https://streamlabs.com/api/v1.0/user?access_token=${access_token}`
     );
 
+    console.log("createOrUpdateUser");
     await createOrUpdateUser({
       ...streamlabs,
       access_token,

@@ -29,16 +29,12 @@ export async function createOrUpdateUser({
           access_token,
         };
 
-    await usersRef.set(
-      {
-        [username]: userSetPayload,
-      },
-      (err) => {
-        if (err) {
-          throw err;
-        }
+    console.log("userSetPayload", userSetPayload);
+    await userRef.set(userSetPayload, (err) => {
+      if (err) {
+        throw err;
       }
-    );
+    });
   } catch (error) {
     console.log("here?\n\n", error, "\n\n");
   }
