@@ -6,6 +6,21 @@ import db from "./firebase-admin";
 const usersRef = db.ref("users");
 const authRef = db.ref("auth");
 
+const verifyAuthToken = (authToken, accessToken) => {
+  let decodedAuthToken;
+  if (authToken) {
+    jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        throw err;
+      }
+
+      decodedAuthToken = decoded;
+    });
+
+    return decodedAuthToken.access_token === accessToken;
+  }
+};
+
 export async function createOrUpdateUser({
   access_token,
   username = "cheese__omelette",
@@ -15,7 +30,8 @@ export async function createOrUpdateUser({
   const userRef = db.ref(`users/${username}`);
 
   try {
-    let dbUser = await userRef.once("value");
+    let dbUserSnapshot = await userRef.once("value");
+    const dbUser = dbUserSnapshot.val();
     const newUser = dbUser === null;
     const userSetPayload = newUser
       ? {
@@ -29,33 +45,84 @@ export async function createOrUpdateUser({
           access_token,
         };
 
-    console.log("userSetPayload", userSetPayload);
-    await userRef.set(userSetPayload, (err) => {
+    await usersRef.set({ [username]: userSetPayload }, (err) => {
       if (err) {
         throw err;
       }
     });
-  } catch (error) {
-    console.log("here?\n\n", error, "\n\n");
+  } catch (err) {
+    console.log(err);
   }
 }
-export async function addAuthToken({ authToken, username }) {
-  try {
-    await authRef.set(
-      {
-        [username]: {
-          auth_token: authToken,
-        },
-      },
-      (error) => {
-        if (error) {
-          console.log("error?", error);
-        }
+
+// export async function addAuthToken({ authToken, username }) {
+//   try {
+//     await authRef.set(
+//       {
+//         [username]: {
+//           auth_token: authToken,
+//         },
+//       },
+//       (err) => {
+//         if (err) {
+//           throw err;
+//         }
+//       }
+//     );
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
+
+export async function updateUserData(
+  username,
+  authToken,
+  { strikeUsername, tipAmount }
+) {
+  return new Promise(async (resolve, reject) => {
+    const userRef = db.ref(`users/${username}`);
+
+    try {
+      const dbUserSnapShot = await userRef.once("value");
+      const dbUser = dbUserSnapShot.val();
+
+      if (!dbUser) {
+        reject("User not found");
       }
-    );
-  } catch (error) {
-    console.log("here?\n\n", error, "\n\n");
-  }
+
+      const { access_token, strike_username, ...user } = dbUser;
+
+      const isLoggedIn = verifyAuthToken(authToken, access_token);
+
+      if (!isLoggedIn) {
+        reject("User not authorized");
+      }
+
+      const newUser = {
+        ...dbUser,
+        tip_min: tipAmount,
+        strike_username: strikeUsername,
+      };
+
+      await usersRef.set(
+        {
+          [username]: newUser,
+        },
+        (err) => {
+          if (err) {
+            throw err;
+          }
+        }
+      );
+
+      newUser.isLoggedIn = true;
+
+      resolve(newUser);
+    } catch (error) {
+      console.log("error", error);
+      reject(error);
+    }
+  });
 }
 
 export async function getProfileData(username, authToken) {
@@ -66,26 +133,14 @@ export async function getProfileData(username, authToken) {
       const dbUserSnapShot = await userRef.once("value");
       const dbUser = dbUserSnapShot.val();
 
-      console.log("user", dbUser);
       if (dbUser) {
         const { access_token, strike_username, ...user } = dbUser;
 
-        let decodedAuthToken;
-        if (authToken) {
-          jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
-            if (err) {
-              throw err;
-            }
+        const isLoggedIn = verifyAuthToken(authToken, access_token);
+        user.isLoggedIn = isLoggedIn;
 
-            decodedAuthToken = decoded;
-            console.log("decoded", decoded);
-          });
-
-          if (decodedAuthToken.access_token === access_token) {
-            user.isLoggedIn = true;
-          } else {
-            user.isLoggedIn = false;
-          }
+        if (isLoggedIn) {
+          return resolve({ ...user, strike_username });
         }
 
         resolve(user);
@@ -99,29 +154,13 @@ export async function getProfileData(username, authToken) {
 }
 
 export async function getUser(username) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      const userRef = db.ref(`users`);
-      userRef.on(
-        "value",
-        (snapshot) => {
-          //
-          // How to get the single item from the db instead of all of them
-          //
-          const users = snapshot.val();
-          const data = users.cheese__omelette;
+      const userRef = db.ref(`users/${username}`);
+      const dbUserSnapShot = await userRef.once("value");
+      const dbUser = dbUserSnapShot.val();
 
-          if (data) {
-            resolve(data);
-          } else {
-            reject();
-          }
-        },
-        (error) => {
-          console.log("The read failed: " + error.name);
-          reject(error);
-        }
-      );
+      resolve(dbUser);
     } catch (error) {
       reject(error);
     }

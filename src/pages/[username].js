@@ -12,10 +12,12 @@ import { UserContext } from "./_app";
 
 export default function TipPage({ username, apiUser }) {
   const { user, setUser } = React.useContext(UserContext);
+  const {
+    query: { view },
+  } = useRouter();
 
   const apiUserData = JSON.stringify(apiUser);
   React.useEffect(() => {
-    console.log("userData", apiUserData);
     setUser(JSON.parse(apiUserData));
   }, [apiUserData, setUser]);
 
@@ -24,7 +26,11 @@ export default function TipPage({ username, apiUser }) {
       {user && (
         <>
           <h1>{username}</h1>
-          {user.isLoggedIn ? <Edit /> : <Tip />}
+          {user.isLoggedIn && !view ? (
+            <Edit username={username} />
+          ) : (
+            <Tip username={username} />
+          )}
         </>
       )}
     </Box>
@@ -36,7 +42,7 @@ export async function getServerSideProps(context) {
   const { auth_token } = cookie.parse(context.req.headers.cookie || "");
 
   // wtf is this
-  const ignored = ["requestProvider.js.map", "favicon.ico"];
+  const ignored = ["requestProvider.js.map", "favicon.ico", "_next"];
   if (ignored.includes(username)) {
     return { props: {} };
   }
@@ -47,7 +53,6 @@ export async function getServerSideProps(context) {
       return { redirects: { destination: "/404", permanent: false } };
     }
 
-    // console.log("user", user);
     return {
       props: { username, apiUser: user || undefined },
     };

@@ -5,13 +5,37 @@ import dynamic from "next/dynamic";
 import { Label, Input, Textarea } from "@rebass/forms";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
-const QRCode = dynamic(() => import("./QR"), { ssr: false });
+import { UserContext } from "pages/_app";
 
 export default function Tip({ username }) {
-  const [amount, setAmount] = React.useState();
+  const { user: apiUser, setUser } = React.useContext(UserContext);
+  const [strikeUsername, setStrikeUsername] = React.useState("");
   const [tipAmount, setTipAmount] = React.useState("");
+  const [success, setSuccess] = React.useState(false);
 
-  async function generateInvoice() {}
+  const apiUserDataStr = JSON.stringify(apiUser);
+  React.useEffect(() => {
+    const { tip_min, strike_username } = JSON.parse(apiUserDataStr);
+    setTipAmount(tip_min);
+    if (strike_username) {
+      setStrikeUsername(strike_username);
+    }
+  }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
+
+  async function submitUser() {
+    try {
+      const { data } = await axios.post("/api/user", {
+        username,
+        strikeUsername,
+        tipAmount,
+      });
+
+      setSuccess(true);
+      setUser(data);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 
   return (
     <Box sx={{ maxWidth: "400px" }}>
@@ -19,21 +43,21 @@ export default function Tip({ username }) {
         <Box>
           <Label htmlFor="strike_username">Strike Username</Label>
           <Input
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => setStrikeUsername(e.target.value)}
             id="strike_username"
             name="strike_username"
             placeholder="Strike Username"
             fontSize={5}
             autocomplete="off"
-            value={amount}
+            value={strikeUsername}
           />
         </Box>
         <Box mt={3}>
-          <Label htmlFor="donation_from">Minimum Tip Amount</Label>
+          <Label htmlFor="tip_min">Minimum Tip Amount</Label>
           <Input
             onChange={(e) => setTipAmount(e.target.value)}
-            id="donation_from"
-            name="donation_from"
+            id="tip_min"
+            name="tip_min"
             placeholder="0.1"
             fontSize={4}
             autocomplete="off"
@@ -42,7 +66,12 @@ export default function Tip({ username }) {
         </Box>
 
         <Box mt={3}>
-          <Button onClick={generateInvoice}>Submit</Button>
+          <Button onClick={submitUser}>Save</Button>
+          {success && (
+            <Box mt={3}>
+              <Text>Successfully updated</Text>
+            </Box>
+          )}
         </Box>
       </>
     </Box>

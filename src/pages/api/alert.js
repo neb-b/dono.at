@@ -21,7 +21,6 @@ async function apiRouteHandler(req, res) {
         name: from,
       }
     );
-    console.log("data", data);
     res.status(200).json({ data });
   } catch (error) {
     console.log(error);
