@@ -36,7 +36,8 @@ export default function Header() {
         <Link href={STREAM_LABS_AUTH}>
           <a>
             <Button variant="secondary" mt={2}>
-              <Text display={["none", "block"]}></Text>Login with Streamlabs
+              <Text display={["none", "block"]}>Login with Streamlabs</Text>
+              <Text display={["block", "none"]}>Login</Text>
             </Button>
           </a>
         </Link>
