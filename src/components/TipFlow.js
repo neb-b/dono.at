@@ -180,7 +180,19 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
 
               <Flex mt={[3, 4]} flexDirection={["column", "column", "row"]}>
                 {isExpired ? (
-                  <Button mt={3} onClick={refreshInvoice}>
+                  <Button
+                    mt={3}
+                    onClick={refreshInvoice}
+                    sx={{
+                      bg: userColor,
+                      color: getButtonTextColorFromBg(userColor),
+
+                      ":hover": {
+                        bg: userColor,
+                        opacity: 0.9,
+                      },
+                    }}
+                  >
                     Refresh
                   </Button>
                 ) : (
