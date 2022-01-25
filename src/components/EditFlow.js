@@ -138,7 +138,7 @@ export default function Tip({ username }) {
           )}
         </Box>
         <Box mt={4}>
-          <Label htmlFor="tip_min">Minimum Tip Amount</Label>
+          <Label htmlFor="tip_min">Minimum Tip Amount (USD)</Label>
           <Input
             tx="forms.input"
             variant="normal"

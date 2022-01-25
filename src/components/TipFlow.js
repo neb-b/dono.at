@@ -69,7 +69,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
   const handleTipAmount = (newVal) => {
     if (newVal < tip_min) {
       setTipAmountError(
-        "Tip amount must be at least $" + Number(tip_min).toFixed(2)
+        "Amount must be at least $" + Number(tip_min).toFixed(2)
       );
     } else {
       setTipAmountError(false);
@@ -224,9 +224,15 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
               <Box as="form" onSubmit={generateInvoice}>
                 <Box>
                   <Label htmlFor="donation_amount">
-                    Amount{" "}
+                    Amount (USD){" "}
                     {tipAmountError && (
-                      <Text color="red" fontWeight="normal" fontSize={2} ml={2}>
+                      <Text
+                        display="inline-block"
+                        color="red"
+                        fontWeight="normal"
+                        fontSize={2}
+                        ml={2}
+                      >
                         {tipAmountError}
                       </Text>
                     )}
