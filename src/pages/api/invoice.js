@@ -9,7 +9,6 @@ async function handler(req, res) {
 
   try {
     const { strike_username } = await getUser(username);
-    console.log("??", strike_username);
     const data = await createInvoice({
       username: strike_username,
       amount,
