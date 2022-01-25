@@ -48,6 +48,7 @@ const buttonFontStyle = {
   borderRadius: "30px",
   px: 4,
   py: 3,
+  pt: "14px",
 };
 
 const theme = {
@@ -75,6 +76,11 @@ const theme = {
       cursor: "pointer",
       color: "black",
       backgroundColor: "white",
+    },
+    link: {
+      ...buttonFontStyle,
+      bg: "transparent",
+      border: "1px solid white",
     },
   },
   forms: {

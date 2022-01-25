@@ -35,6 +35,12 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
     setLoading(false);
   }
 
+  const resetInvoice = () => {
+    setInvoiceData(null);
+    setExpires(null);
+    setExpirationTime(null);
+  };
+
   const triggerAlert = React.useCallback(async () => {
     await axios.post("/api/alert", {
       username,
@@ -104,107 +110,123 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
       {!paid && (
         <>
           {invoiceData && (
-            <Flex
-              alignItems={["flex-start", "center"]}
-              flexDirection={["column", "row"]}
-            >
-              <Box>
-                <QRCode
-                  expired={isExpired}
-                  data={invoiceData.lnInvoice}
-                  animationDuration={expirationTime}
-                />
-                {isExpired && (
-                  <Box mt={3}>
-                    <Button onClick={generateInvoice}>Refresh</Button>
-                  </Box>
-                )}
-              </Box>
-              <Box ml={[0, 4]} mt={[4, 0]}>
-                <Text fontSize={4}>
-                  Tipping <Text color="api">${Number(amount).toFixed(2)}</Text>
-                </Text>
-                <Text mt={2} fontSize={3}>
-                  From <Text fontWeight="normal">{from || "Anonymous"}</Text>
-                </Text>
-                {message && (
-                  <>
-                    <Text mt={3}>Message</Text>
-                    <Text mt={2} fontWeight="normal">
-                      {message}
-                    </Text>
-                  </>
-                )}
-              </Box>
-            </Flex>
+            <>
+              <Flex
+                alignItems={["flex-start", "center"]}
+                flexDirection={["column", "row"]}
+              >
+                <Box>
+                  <a href={`lightning:${invoiceData.lnInvoice}`}>
+                    <QRCode
+                      expired={isExpired}
+                      data={invoiceData.lnInvoice}
+                      animationDuration={expirationTime}
+                    />
+                  </a>
+
+                  {isExpired && (
+                    <Box mt={3}>
+                      <Button onClick={generateInvoice}>Refresh</Button>
+                    </Box>
+                  )}
+                </Box>
+                <Box ml={[0, 4]} mt={[4, 0]}>
+                  <Text fontSize={4}>
+                    Tipping{" "}
+                    <Text color="api">${Number(amount).toFixed(2)}</Text>
+                  </Text>
+                  <Text mt={2} fontSize={3}>
+                    From <Text fontWeight="normal">{from || "Anonymous"}</Text>
+                  </Text>
+                  {message && (
+                    <>
+                      <Text mt={3}>Message</Text>
+                      <Text mt={2} fontWeight="normal">
+                        {message}
+                      </Text>
+                    </>
+                  )}
+                </Box>
+              </Flex>
+
+              <Button mt={4} onClick={resetInvoice} variant="link">
+                Reset
+              </Button>
+            </>
           )}
           {!invoiceData && (
             <>
-              <Box>
-                <Label htmlFor="donation_amount">
-                  Amount{" "}
-                  {tipAmountError && (
-                    <Text color="red" fontWeight="normal" fontSize={2} ml={3}>
-                      {tipAmountError}
-                    </Text>
-                  )}
-                </Label>
-                <Input
-                  disabled={loading}
-                  tx="forms.input"
-                  variant="normal"
-                  onChange={(e) => handleTipAmount(e.target.value)}
-                  name="donation_amount"
-                  placeholder="1.23"
-                  autocomplete="off"
-                  value={amount}
-                />
-              </Box>
-              <Box mt={3}>
-                <Label htmlFor="donation_from">From</Label>
-                <Input
-                  disabled={loading}
-                  tx="forms.input"
-                  variant="normal"
-                  onChange={(e) => setFrom(e.target.value)}
-                  name="donation_from"
-                  placeholder="satoshi"
-                  autocomplete="off"
-                  value={from}
-                />
-              </Box>
-              <Box mt={3}>
-                <Label htmlFor="donation_message">Message</Label>
-                <Textarea
-                  disabled={loading}
-                  onChange={(e) => setMessage(e.target.value)}
-                  name="donation_message"
-                  placeholder="Hello"
-                  autocomplete="off"
-                />
-              </Box>
+              <Box as="form" onSubmit={generateInvoice}>
+                <Box>
+                  <Label htmlFor="donation_amount">
+                    Amount{" "}
+                    {tipAmountError && (
+                      <Text color="red" fontWeight="normal" fontSize={2} ml={3}>
+                        {tipAmountError}
+                      </Text>
+                    )}
+                  </Label>
+                  <Input
+                    disabled={loading}
+                    tx="forms.input"
+                    variant="normal"
+                    onChange={(e) => handleTipAmount(e.target.value)}
+                    name="donation_amount"
+                    placeholder="1.23"
+                    autocomplete="off"
+                    value={amount}
+                  />
+                </Box>
+                <Box mt={3}>
+                  <Label htmlFor="donation_from">From</Label>
+                  <Input
+                    disabled={loading}
+                    tx="forms.input"
+                    variant="normal"
+                    onChange={(e) => setFrom(e.target.value)}
+                    name="donation_from"
+                    placeholder="satoshi"
+                    autocomplete="off"
+                    value={from}
+                  />
+                </Box>
+                <Box mt={3}>
+                  <Label htmlFor="donation_message">Message</Label>
+                  <Textarea
+                    disabled={loading}
+                    onChange={(e) => setMessage(e.target.value)}
+                    name="donation_message"
+                    placeholder="Hello"
+                    autocomplete="off"
+                  />
+                </Box>
 
-              <Box mt={3}>
-                <Flex flexDirection={["column", "row"]}>
-                  <Button disabled={loading} onClick={generateInvoice}>
-                    {loading ? "Submitting..." : "Submit"}
-                  </Button>
-                  {isLoggedIn && (
+                <Box mt={3}>
+                  <Flex flexDirection={["column", "row"]}>
                     <Button
-                      mt={[3, 0]}
-                      variant="secondary"
-                      ml={2}
-                      onClick={() =>
-                        router.push({
-                          pathname: router.query.username,
-                          query: {},
-                        })
-                      }
+                      type="submit"
+                      disabled={loading}
+                      onClick={generateInvoice}
                     >
-                      Edit Your Info
+                      {loading ? "Submitting..." : "Submit"}
                     </Button>
-                  )}
-                </Flex>
+                    {isLoggedIn && (
+                      <Button
+                        mt={[3, 0]}
+                        variant="secondary"
+                        ml={2}
+                        onClick={() =>
+                          router.push({
+                            pathname: router.query.username,
+                            query: {},
+                          })
+                        }
+                      >
+                        Edit Your Info
+                      </Button>
+                    )}
+                  </Flex>
+                </Box>
               </Box>
             </>
           )}

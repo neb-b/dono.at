@@ -17,7 +17,7 @@ export default function Header() {
   const STREAM_LABS_AUTH = `https://streamlabs.com/api/v1.0/authorize?client_id=${process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI}&scope=donations.create+alerts.create&response_type=code`;
 
   return (
-    <Flex alignItems="flex-end" justifyContent="space-between" py={4}>
+    <Flex alignItems="flex-end" justifyContent="space-between" py={4} mb={4}>
       <Link href="/" style={{ textDecoration: "none" }}>
         <Text
           fontWeight="bold"
