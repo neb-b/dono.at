@@ -81,7 +81,7 @@ export default function TipPage({ username, apiUser, hasEnabledTips }) {
                 <Tip username={username} {...user} />
               ) : (
                 <Text ml={4} mt={4} fontWeight="normal">
-                  This user hasn't enabled tips yet.
+                  This user hasn&apos;t enabled tips yet.
                 </Text>
               )}
             </>
