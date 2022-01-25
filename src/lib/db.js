@@ -122,13 +122,10 @@ export async function getProfileData(username, authToken) {
       const dbUser = dbUserSnapShot.val();
 
       if (dbUser) {
-        const { access_token, strike_username, ...user } = dbUser;
+        const { access_token, ...user } = dbUser;
 
         const isLoggedIn = verifyAuthToken(authToken, access_token);
         user.isLoggedIn = isLoggedIn;
-        if (isLoggedIn) {
-          return resolve({ ...user, strike_username });
-        }
 
         resolve(user);
       } else {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Tip from "components/TipFlow";
 import Edit from "components/EditFlow";
@@ -11,11 +12,15 @@ import { getProfileData } from "../lib/db";
 
 import { UserContext } from "./_app";
 
-export default function TipPage({ username, apiUser }) {
+export default function TipPage({ username, apiUser, hasEnabledTips }) {
   const { user, setUser } = React.useContext(UserContext);
   const {
     query: { view },
   } = useRouter();
+  const profileLink =
+    user && user.primary === "twitch"
+      ? `twitch.tv/${user.display_name}`
+      : `youtube.com/${user.display_name}`;
 
   const apiUserData = JSON.stringify(apiUser);
   React.useEffect(() => {
@@ -29,7 +34,7 @@ export default function TipPage({ username, apiUser }) {
   }, [apiUserData, setUser]);
 
   return (
-    <Box maxWidth={460} mx="auto">
+    <Box maxWidth={460} mx="auto" mt={5}>
       {user && user.isLoggedIn !== undefined && (
         <>
           <Flex mb={4} alignItems="center">
@@ -47,14 +52,37 @@ export default function TipPage({ username, apiUser }) {
                 src={user.thumbnail}
               />
             </Box>
-            <Text fontSize={24} ml={2}>
-              {username}
-            </Text>
+            <Flex ml={[3]} flexDirection="column" justifyContent="center">
+              <Text mt={-2} fontSize={28}>
+                {username}
+              </Text>
+              <Link href={`https://${profileLink}`}>
+                <a
+                  style={{
+                    textDecoration: "none",
+                  }}
+                >
+                  <Text
+                    fontSize={12}
+                    color="gray"
+                    sx={{ ":hover": { color: "api" } }}
+                  >
+                    {profileLink}
+                  </Text>
+                </a>
+              </Link>
+            </Flex>
           </Flex>
           {user.isLoggedIn && !view ? (
             <Edit username={username} {...user} />
           ) : (
-            <Tip username={username} {...user} />
+            <>
+              {hasEnabledTips ? (
+                <Tip username={username} {...user} />
+              ) : (
+                <Text mt={5}>This user hasn't enabled tips yet.</Text>
+              )}
+            </>
           )}
         </>
       )}
@@ -73,13 +101,20 @@ export async function getServerSideProps(context) {
   }
 
   try {
-    const user = await getProfileData(username, auth_token);
+    const { strike_username, ...user } = await getProfileData(
+      username,
+      auth_token
+    );
     if (!user) {
       return { redirects: { destination: "/404", permanent: false } };
     }
 
     return {
-      props: { username, apiUser: user || undefined },
+      props: {
+        username,
+        apiUser: user || undefined,
+        hasEnabledTips: Boolean(strike_username),
+      },
     };
   } catch (error) {
     console.log("error", error);

@@ -9,18 +9,19 @@ const fontStyles = {
 const inputStyles = {
   ...fontStyles,
   mt: 1,
-  fontSize: "24px",
   fontWeight: "normal",
-  height: "52px",
+  height: "56px",
+  fontSize: "19px",
+  lineHeight: "1.32",
   borderWidth: 1,
   borderRadius: 10,
   width: "100%",
   borderColor: "transparent",
   bg: "#1c1c1e",
-  width: "100%",
   cursor: "text",
   outline: "none",
   position: "relative",
+
   "::-webkit-search-decoration:hover, ::-webkit-search-cancel-button:hover": {
     cursor: "pointer",
   },
@@ -43,7 +44,7 @@ const buttonFontStyle = {
   letterSpacing: "-0.19px",
   fontSize: 3,
   fontWeight: "bold",
-  height: "52px",
+  height: "56px",
   cursor: "pointer",
   borderRadius: "30px",
   px: 4,
@@ -58,6 +59,8 @@ const theme = {
   colors: {
     primaryText: "white",
     black: "#000e1a",
+    gray: "rgba(235,235,245,0.6)",
+    gray18: "rgba(235,235,245,0.18)",
     white: "#fff",
     blue: "#007ce0",
     navy: "#004175",
@@ -88,6 +91,10 @@ const theme = {
       normal: {
         ...inputStyles,
         fontWeight: "bold",
+
+        "::placeholder": {
+          color: "gray18",
+        },
       },
     },
 
@@ -100,7 +107,8 @@ const theme = {
     label: {
       ...fontStyles,
       width: "auto",
-      fontWeight: "normal",
+      fontWeight: "bold",
+      color: "gray",
     },
   },
 };

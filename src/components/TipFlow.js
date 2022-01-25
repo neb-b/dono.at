@@ -14,6 +14,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   const [tipAmountError, setTipAmountError] = React.useState(false);
   const [from, setFrom] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [msgError, setMsgError] = React.useState(false);
   const [invoiceData, setInvoiceData] = React.useState();
   const [expirationTime, setExpirationTime] = React.useState(0);
   const [expires, setExpires] = React.useState();
@@ -61,6 +62,15 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
     }
 
     setAmount(newVal);
+  };
+
+  const handleMessage = (newMsg) => {
+    if (newMsg.length > 254) {
+      setMsgError("Maximum message length reached");
+      return;
+    }
+
+    setMessage(newMsg);
   };
 
   React.useEffect(() => {
@@ -173,7 +183,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                   <Label htmlFor="donation_amount">
                     Amount{" "}
                     {tipAmountError && (
-                      <Text color="red" fontWeight="normal" fontSize={2} ml={3}>
+                      <Text color="red" fontWeight="normal" fontSize={2} ml={2}>
                         {tipAmountError}
                       </Text>
                     )}
@@ -203,13 +213,21 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                   />
                 </Box>
                 <Box mt={3}>
-                  <Label htmlFor="donation_message">Message</Label>
+                  <Label htmlFor="donation_message">
+                    Message{" "}
+                    {msgError && (
+                      <Text color="red" fontWeight="normal" fontSize={2} ml={2}>
+                        {msgError}
+                      </Text>
+                    )}
+                  </Label>
                   <Textarea
                     disabled={loading}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => handleMessage(e.target.value)}
                     name="donation_message"
                     placeholder="Hello"
                     autocomplete="off"
+                    value={message}
                   />
                 </Box>
 
