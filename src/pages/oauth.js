@@ -50,7 +50,6 @@ export async function getServerSideProps(context) {
 
     context.res.setHeader("set-cookie", `auth_token=${authToken}`);
 
-    return { props: { streamlabs } };
     return {
       redirect: {
         destination: `/${streamlabs.username}`,
