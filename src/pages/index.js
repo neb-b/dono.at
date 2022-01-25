@@ -11,7 +11,7 @@ const StyledLink = styled.a`
 
 export default function Home() {
   return (
-    <Box mt={6}>
+    <Box my={6}>
       <Flex alignItems="center" flexDirection={["column", "row"]}>
         <Box>
           <Text fontSize={72} fontWeight="bold" maxWidth={[600]}>

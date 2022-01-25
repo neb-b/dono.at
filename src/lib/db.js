@@ -26,9 +26,12 @@ const verifyAuthToken = (authToken, accessToken) => {
 
 export async function createOrUpdateUser({
   access_token,
-  username = "cheese__omelette",
-  display_name,
-  thumbnail,
+  streamlabs: {
+    username = "cheese__omelette",
+    display_name,
+    thumbnail,
+    primary,
+  },
 }) {
   const userRef = db.ref(`users/${username}`);
 
@@ -42,6 +45,7 @@ export async function createOrUpdateUser({
           thumbnail,
           display_name,
           tip_min: 0.1,
+          primary,
         }
       : {
           ...dbUser,

@@ -35,25 +35,22 @@ export async function getServerSideProps(context) {
     });
 
     const {
+      data,
       data: { streamlabs },
     } = await axios.get(
       `https://streamlabs.com/api/v1.0/user?access_token=${access_token}`
     );
 
     await createOrUpdateUser({
-      ...streamlabs,
+      ...data,
       access_token,
     });
 
     const authToken = jwt.sign({ access_token }, process.env.JWT_SECRET);
 
-    // await addAuthToken({
-    //   authToken,
-    //   username: streamlabs.username,
-    // });
-
     context.res.setHeader("set-cookie", `auth_token=${authToken}`);
 
+    return { props: { streamlabs } };
     return {
       redirect: {
         destination: `/${streamlabs.username}`,
