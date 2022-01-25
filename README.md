@@ -1,8 +1,10 @@
 ### Receive Lightning tips live on stream using the Strike Partner API
 
-[streamlabs-ln-donations.vercel.app](https://streamlabs-ln-donations.vercel.app)
+This project allows users to receive lightning tips and display them on stream like regular donations. Just login with Streamlabs and add your strike username.
 
-## Getting Started
+[https://ln-streamlabs-donations.vercel.app/](https://https://ln-streamlabs-donations.vercel.app/)
+
+## Development
 
 This is a next.js project. To run it you need to install dependencies with yarn or npm
 
