@@ -2,7 +2,7 @@
 
 This project allows users to receive lightning tips and display them on stream like regular donations. Just login with Streamlabs and add your strike username.
 
-[https://ln-streamlabs-donations.vercel.app/](https://ln-streamlabs-donations.vercel.app/)
+[https://dono.at](https://dono.at)
 
 ## Development
 
