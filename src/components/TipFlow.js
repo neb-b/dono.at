@@ -101,7 +101,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   }, [expires, setExpires]);
 
   return (
-    <Box sx={{ maxWidth: "500px" }}>
+    <Box sx={{ maxWidth: "500px", pb: 4 }}>
       {paid && (
         <Box>
           <Text>Thank you for your tip!</Text>
