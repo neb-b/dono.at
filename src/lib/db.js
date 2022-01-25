@@ -130,10 +130,9 @@ export async function getProfileData(username, authToken) {
 
         resolve(user);
       } else {
-        reject();
+        reject("user_not_found");
       }
     } catch (error) {
-      console.log("error??", error);
       reject(error);
     }
   });

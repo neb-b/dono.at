@@ -105,7 +105,7 @@ export async function getServerSideProps(context) {
   try {
     const user = await getProfileData(username, auth_token);
     if (!user) {
-      return { redirects: { destination: "/404", permanent: false } };
+      return { notFound: true };
     }
 
     return {
@@ -116,7 +116,10 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
-    console.log("error", error);
+    if (error === "user_not_found") {
+      return { notFound: true };
+    }
+
     return { props: {} };
   }
 }
