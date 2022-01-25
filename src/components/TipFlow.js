@@ -24,18 +24,32 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   const invoiceId = invoiceData?.invoiceId;
   const isExpired = expires <= 0;
 
-  async function generateInvoice() {
-    setInvoiceData(null);
+  console.log("expires", expires);
+  console.log("expirationTime", expirationTime);
+
+  async function generateInvoice(isRefresh = false) {
+    if (!isRefresh) {
+      setInvoiceData(null);
+    }
+
     setLoading(true);
+    setExpires(null);
+    setExpirationTime(null);
+
     const { data } = await axios.post("/api/invoice", {
       username,
       amount,
     });
+
     setExpires(data.expirationInSec);
     setExpirationTime(data.expirationInSec);
     setInvoiceData(data);
     setLoading(false);
   }
+
+  const refreshInvoice = () => {
+    generateInvoice(true);
+  };
 
   const resetInvoice = () => {
     setInvoiceData(null);
@@ -112,7 +126,9 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   }, [expires, setExpires]);
 
   return (
-    <Box sx={{ maxWidth: "500px", pb: 4 }}>
+    <Box
+      sx={{ mx: "auto", maxWidth: invoiceData ? ["500px"] : ["460px"], pb: 4 }}
+    >
       {paid && (
         <Box>
           <Text>Thank you for your tip!</Text>
@@ -124,18 +140,13 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
             <>
               <Flex
                 alignItems={["flex-start", "center"]}
-                flexDirection={["column", "row"]}
+                flexDirection={["column", "column", "row-reverse"]}
               >
-                <Box>
-                  <a href={`lightning:${invoiceData.lnInvoice}`}>
-                    <QRCode
-                      expired={isExpired}
-                      data={invoiceData.lnInvoice}
-                      animationDuration={expirationTime}
-                    />
-                  </a>
-                </Box>
-                <Box ml={[0, 4]} mt={[4, 0]}>
+                <Box
+                  ml={[0, 5]}
+                  mt={[3, 0]}
+                  sx={{ width: ["100%", "calc(100% - 240px)"] }}
+                >
                   <Text fontSize={4}>
                     Tipping{" "}
                     <Text color="api">${Number(amount).toFixed(2)}</Text>
@@ -152,28 +163,47 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                     </>
                   )}
                 </Box>
+
+                <Box width={240} height={240} mt={[3, 0]}>
+                  <a href={`lightning:${invoiceData.lnInvoice}`}>
+                    {expirationTime && (
+                      <QRCode
+                        expired={isExpired}
+                        data={invoiceData.lnInvoice}
+                        animationDuration={expirationTime}
+                      />
+                    )}
+                  </a>
+                </Box>
               </Flex>
 
-              {isExpired ? (
-                <Button mt={3} onClick={generateInvoice}>
-                  Refresh
-                </Button>
-              ) : (
+              <Flex mt={[3, 4]} flexDirection={["column", "column", "row"]}>
+                {isExpired ? (
+                  <Button mt={3} onClick={refreshInvoice}>
+                    Refresh
+                  </Button>
+                ) : (
+                  <Button
+                    mt={3}
+                    onClick={() => {
+                      navigator.clipboard.writeText(invoiceData.lnInvoice);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 1000);
+                    }}
+                    variant="link"
+                  >
+                    {copied ? "Copied" : "Copy Invoice"}
+                  </Button>
+                )}
                 <Button
+                  ml={[0, 0, 2]}
                   mt={3}
-                  onClick={() => {
-                    navigator.clipboard.writeText(invoiceData.lnInvoice);
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 1000);
-                  }}
+                  onClick={resetInvoice}
                   variant="link"
                 >
-                  {copied ? "Copied" : "Copy"}
+                  Go Back
                 </Button>
-              )}
-              <Button ml={2} mt={3} onClick={resetInvoice} variant="link">
-                Go Back
-              </Button>
+              </Flex>
             </>
           )}
           {!invoiceData && (
@@ -243,12 +273,11 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                     {isLoggedIn && (
                       <Button
                         mt={[3, 0]}
-                        variant="secondary"
-                        ml={2}
+                        ml={[0, "auto"]}
+                        variant="link"
                         onClick={() =>
                           router.push({
                             pathname: router.query.username,
-                            query: {},
                           })
                         }
                       >

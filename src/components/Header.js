@@ -17,28 +17,34 @@ export default function Header() {
   const STREAM_LABS_AUTH = `https://streamlabs.com/api/v1.0/authorize?client_id=${process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI}&scope=donations.create+alerts.create&response_type=code`;
 
   return (
-    <Flex alignItems="center" justifyContent="space-between" py={2} mb={4}>
-      <Flex alignItems="flex-start">
-        <Link href="/" style={{ textDecoration: "none" }}>
-          <Text
-            fontWeight="bold"
-            color="white"
-            fontSize={24}
-            sx={{
-              ":hover": {
-                textDecoration: "underline",
-              },
-            }}
-          >
+    <Flex
+      alignItems="center"
+      justifyContent="space-between"
+      py={2}
+      mb={4}
+      minHeight={80}
+    >
+      <Link href="/" style={{ textDecoration: "none" }}>
+        <Text
+          fontWeight="bold"
+          color="white"
+          fontSize={24}
+          sx={{
+            ":hover": {
+              color: "api",
+            },
+          }}
+        >
+          <Flex alignItems="flex-start">
             dono.at
-          </Text>
-        </Link>
-        {/* {user?.display_name && (
-          <Text fontWeight="bold" color="white" fontSize={24}>
-            {`/${user.display_name}`}
-          </Text>
-        )} */}
-      </Flex>
+            {router.pathname !== "/" && (
+              <Text display="inline" ml={1}>
+                {"/"}
+              </Text>
+            )}
+          </Flex>
+        </Text>
+      </Link>
       {user.isLoggedIn !== undefined && !user.isLoggedIn && (
         <Link href={STREAM_LABS_AUTH}>
           <Button variant="secondary" mt={2}>

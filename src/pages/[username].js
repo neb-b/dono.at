@@ -34,7 +34,7 @@ export default function TipPage({ username, apiUser, hasEnabledTips }) {
   }, [apiUserData, setUser]);
 
   return (
-    <Box maxWidth={460} mx="auto" mt={5}>
+    <Box sx={{ mx: "auto", maxWidth: "500px", pb: 4 }} mt={[5, 5]}>
       {user && user.isLoggedIn !== undefined && (
         <>
           <Flex mb={4} alignItems="center">
@@ -53,7 +53,7 @@ export default function TipPage({ username, apiUser, hasEnabledTips }) {
               />
             </Box>
             <Flex ml={[3]} flexDirection="column" justifyContent="center">
-              <Text mt={-2} fontSize={28}>
+              <Text mt={-2} fontSize={[24, 32]}>
                 {username}
               </Text>
               <Link href={`https://${profileLink}`}>
@@ -80,7 +80,9 @@ export default function TipPage({ username, apiUser, hasEnabledTips }) {
               {hasEnabledTips ? (
                 <Tip username={username} {...user} />
               ) : (
-                <Text mt={5}>This user hasn't enabled tips yet.</Text>
+                <Text ml={4} mt={4} fontWeight="normal">
+                  This user hasn't enabled tips yet.
+                </Text>
               )}
             </>
           )}
@@ -101,10 +103,7 @@ export async function getServerSideProps(context) {
   }
 
   try {
-    const { strike_username, ...user } = await getProfileData(
-      username,
-      auth_token
-    );
+    const user = await getProfileData(username, auth_token);
     if (!user) {
       return { redirects: { destination: "/404", permanent: false } };
     }
@@ -113,7 +112,7 @@ export async function getServerSideProps(context) {
       props: {
         username,
         apiUser: user || undefined,
-        hasEnabledTips: Boolean(strike_username),
+        hasEnabledTips: Boolean(user.strike_username),
       },
     };
   } catch (error) {

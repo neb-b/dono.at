@@ -11,14 +11,20 @@ async function apiRouteHandler(req, res) {
     const { access_token } = await getUser(username);
 
     const { data } = await axios.post(
-      `https://streamlabs.com/api/v1.0/donations`,
+      // `https://streamlabs.com/api/v1.0/donations`,
+      `https://streamlabs.com/api/v1.0/alerts`,
       {
         access_token,
-        currency: "USD",
-        amount,
-        identifier: uuid(),
-        message,
-        name: from,
+        // currency: "USD",
+        // amount,
+        // identifier: uuid(),
+        // message,
+        // name: from,
+
+        type: "donation",
+        message: `*${from}* donated *$${Number(amount).toFixed(2)}*!`,
+        user_message: message === "" ? " " : message,
+        special_text_color: "orange",
       }
     );
 

@@ -65,6 +65,7 @@ const theme = {
     blue: "#007ce0",
     navy: "#004175",
     api: "#CCFF00",
+    apiLight: "rgb(219, 255, 77)",
   },
   buttons: {
     primary: {
@@ -73,12 +74,26 @@ const theme = {
       bg: "black",
       backgroundColor: "#CCFF00",
       fontWeight: "bold",
+
+      ":hover": {
+        bg: "apiLight",
+      },
     },
     secondary: {
       ...buttonFontStyle,
       cursor: "pointer",
       color: "black",
       backgroundColor: "white",
+    },
+    outline: {
+      ...buttonFontStyle,
+      bg: "transparent",
+      border: "1px solid white",
+      ":hover": {
+        bg: "white",
+        color: "black",
+        borderColor: "white",
+      },
     },
     link: {
       ...buttonFontStyle,

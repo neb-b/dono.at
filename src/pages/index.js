@@ -11,21 +11,26 @@ const StyledLink = styled.a`
 
 export default function Home() {
   return (
-    <Box my={6}>
-      <Flex alignItems="center" flexDirection={["column", "row"]}>
+    <Box my={6} maxWidth={800} mx="auto">
+      <Flex alignItems="center" flexDirection={["column", "column", "row"]}>
         <Box>
-          <Text fontSize={72} fontWeight="bold" maxWidth={[600]}>
-            Receive Lightning tips live on stream
+          <Text
+            fontSize={64}
+            lineHeight={1.1}
+            fontWeight="bold"
+            maxWidth={[600]}
+          >
+            Lightning Fast Livestream Donations
           </Text>
 
           <Button variant="primary" mt={4}>
             <Link href="/cheese__omelette" passHref>
-              <StyledLink>View Example Tip Page</StyledLink>
+              <Text>View Example Tip Page</Text>
             </Link>
           </Button>
         </Box>
-        <Box mt={[4, 0]}>
-          <Image src={DonationImage} alt="" height={300} width={450} />
+        <Box mt={[4, 4, 0]} pl={2}>
+          <Image src={DonationImage} alt="" height={350} width={500} />
         </Box>
       </Flex>
     </Box>
