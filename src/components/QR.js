@@ -2,7 +2,13 @@ import { useEffect, useRef } from "react";
 import qrCodeConfig from "./qrCodeConfig";
 import styles from "./QRCode.module.css";
 
-export default function QRCode({ data, expired, animationDuration, onClick }) {
+export default function QRCode({
+  data,
+  color,
+  expired,
+  animationDuration,
+  onClick,
+}) {
   const ref = useRef();
 
   useEffect(() => {
@@ -23,7 +29,7 @@ export default function QRCode({ data, expired, animationDuration, onClick }) {
             width="236"
             height="236"
             fill="none"
-            stroke="#CCFF00"
+            stroke={color}
             strokeWidth="4"
             rx="28"
           />

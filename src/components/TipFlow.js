@@ -6,9 +6,11 @@ import { useRouter } from "next/router";
 import { Label, Input, Textarea } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
+import { getButtonTextColorFromBg } from "components/EditFlow";
+
 const QRCode = dynamic(() => import("./QR"), { ssr: false });
 
-export default function Tip({ username, tip_min, isLoggedIn }) {
+export default function Tip({ username, tip_min, isLoggedIn, color }) {
   const router = useRouter();
   const [amount, setAmount] = React.useState(tip_min);
   const [tipAmountError, setTipAmountError] = React.useState(false);
@@ -23,9 +25,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   const [copied, setCopied] = React.useState(false);
   const invoiceId = invoiceData?.invoiceId;
   const isExpired = expires <= 0;
-
-  console.log("expires", expires);
-  console.log("expirationTime", expirationTime);
+  const userColor = color || "#CCFF00";
 
   async function generateInvoice(isRefresh = false) {
     if (!isRefresh) {
@@ -149,7 +149,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                 >
                   <Text fontSize={4}>
                     Tipping{" "}
-                    <Text color="api">${Number(amount).toFixed(2)}</Text>
+                    <Text color={color}>${Number(amount).toFixed(2)}</Text>
                   </Text>
                   <Text mt={2} fontSize={3}>
                     From <Text fontWeight="normal">{from || "Anonymous"}</Text>
@@ -168,6 +168,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                   <a href={`lightning:${invoiceData.lnInvoice}`}>
                     {expirationTime && (
                       <QRCode
+                        color={userColor}
                         expired={isExpired}
                         data={invoiceData.lnInvoice}
                         animationDuration={expirationTime}
@@ -267,6 +268,15 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                       type="submit"
                       disabled={loading}
                       onClick={generateInvoice}
+                      sx={{
+                        bg: userColor,
+                        color: getButtonTextColorFromBg(userColor),
+
+                        ":hover": {
+                          bg: userColor,
+                          opacity: 0.9,
+                        },
+                      }}
                     >
                       {loading ? "Submitting..." : "Submit"}
                     </Button>

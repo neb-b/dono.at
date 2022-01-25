@@ -5,7 +5,7 @@ import { createInvoice } from "../../lib/strike";
 
 async function handler(req, res) {
   const {
-    body: { username, strikeUsername, tipAmount },
+    body: { username, strikeUsername, tipAmount, profileColor },
   } = req;
   const { auth_token } = cookie.parse(req.headers.cookie || "");
 
@@ -17,6 +17,7 @@ async function handler(req, res) {
     const user = await updateUserData(username, auth_token, {
       strikeUsername,
       tipAmount,
+      profileColor,
     });
     res.status(200).json(user);
   } catch (error) {

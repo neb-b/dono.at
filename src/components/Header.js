@@ -45,7 +45,8 @@ export default function Header() {
           </Flex>
         </Text>
       </Link>
-      {user.isLoggedIn !== undefined && !user.isLoggedIn && (
+      {(router.pathname === "/" ||
+        (user.isLoggedIn !== undefined && !user.isLoggedIn)) && (
         <Link href={STREAM_LABS_AUTH}>
           <Button variant="secondary" mt={2}>
             <Text display={["none", "block"]}>Login with Streamlabs</Text>

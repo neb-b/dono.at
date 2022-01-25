@@ -65,7 +65,7 @@ export async function createOrUpdateUser({
 export async function updateUserData(
   username,
   authToken,
-  { strikeUsername, tipAmount }
+  { strikeUsername, tipAmount, profileColor }
 ) {
   return new Promise(async (resolve, reject) => {
     const userRef = db.ref(`users/${username}`);
@@ -90,6 +90,7 @@ export async function updateUserData(
         ...dbUser,
         tip_min: tipAmount,
         strike_username: strikeUsername,
+        color: profileColor,
       };
 
       await usersRef.set(

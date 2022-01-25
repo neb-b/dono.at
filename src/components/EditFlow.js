@@ -10,23 +10,35 @@ import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
 import { UserContext } from "pages/_app";
 
+export const getButtonTextColorFromBg = (hexcolor) => {
+  hexcolor = hexcolor.replace("#", "");
+  var r = parseInt(hexcolor.substr(0, 2), 16);
+  var g = parseInt(hexcolor.substr(2, 2), 16);
+  var b = parseInt(hexcolor.substr(4, 2), 16);
+  var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "black" : "white";
+};
+
 export default function Tip({ username }) {
   const router = useRouter();
   const copyRef = React.createRef();
   const { user: apiUser, setUser } = React.useContext(UserContext);
   const [strikeUsername, setStrikeUsername] = React.useState("");
   const [tipAmount, setTipAmount] = React.useState("");
+  const [profileColor, setProfileColor] = React.useState("");
   const [success, setSuccess] = React.useState(false);
   const [showCheckMark, setShowCheckMark] = React.useState(false);
   const donoLink = `https://dono.at/${username}`;
 
   const apiUserDataStr = JSON.stringify(apiUser);
   React.useEffect(() => {
-    const { tip_min, strike_username } = JSON.parse(apiUserDataStr);
+    const { tip_min, strike_username, color } = JSON.parse(apiUserDataStr);
     setTipAmount(tip_min);
     if (strike_username) {
       setStrikeUsername(strike_username);
     }
+
+    setProfileColor(color || "#CCFF00");
   }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
 
   const handleCopy = () => {
@@ -45,6 +57,7 @@ export default function Tip({ username }) {
         username,
         strikeUsername,
         tipAmount,
+        profileColor,
       });
 
       setSuccess(true);
@@ -121,10 +134,51 @@ export default function Tip({ username }) {
             value={tipAmount}
           />
         </Box>
+        <Box mt={4}>
+          <Label htmlFor="profile_color">Profile Color</Label>
+          <Input
+            sx={{
+              opacity: `1 !important`,
+              padding: 0,
+
+              "::-webkit-color-swatch": {
+                border: "none",
+                borderRadius: 10,
+                padding: 0,
+              },
+              "::-webkit-color-swatch-wrapper": {
+                border: "none",
+                borderRadius: 10,
+                padding: 0,
+              },
+            }}
+            tx="forms.input"
+            variant="normal"
+            onChange={(e) => setProfileColor(e.target.value)}
+            id="profile_color"
+            name="profile_color"
+            autocomplete="off"
+            type="color"
+            value={profileColor}
+          />
+        </Box>
 
         <Box mt={4}>
           <Flex flexDirection={["column", "row"]}>
-            <Button onClick={submitUser}>Save</Button>
+            <Button
+              onClick={submitUser}
+              sx={{
+                bg: profileColor,
+                color: getButtonTextColorFromBg(profileColor),
+
+                ":hover": {
+                  bg: profileColor,
+                  opacity: 0.9,
+                },
+              }}
+            >
+              Save
+            </Button>
             <Button
               variant="outline"
               ml={["0", "auto"]}
