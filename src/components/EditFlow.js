@@ -120,6 +120,22 @@ export default function Tip({ username }) {
             autocomplete="off"
             value={strikeUsername}
           />
+
+          {!apiUser.strike_username && (
+            <Text fontWeight="normal" mt={2}>
+              Need a username? Click{" "}
+              <Link
+                href="https://strike.me/download"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Text color="api" display="inline-block">
+                  here
+                </Text>
+              </Link>{" "}
+              to download Strike and get started.
+            </Text>
+          )}
         </Box>
         <Box mt={4}>
           <Label htmlFor="tip_min">Minimum Tip Amount</Label>
