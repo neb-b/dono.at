@@ -19,6 +19,7 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
   const [expires, setExpires] = React.useState();
   const [paid, setPaid] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
   const invoiceId = invoiceData?.invoiceId;
   const isExpired = expires <= 0;
 
@@ -123,12 +124,6 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                       animationDuration={expirationTime}
                     />
                   </a>
-
-                  {isExpired && (
-                    <Box mt={3}>
-                      <Button onClick={generateInvoice}>Refresh</Button>
-                    </Box>
-                  )}
                 </Box>
                 <Box ml={[0, 4]} mt={[4, 0]}>
                   <Text fontSize={4}>
@@ -149,8 +144,25 @@ export default function Tip({ username, tip_min, isLoggedIn }) {
                 </Box>
               </Flex>
 
-              <Button mt={4} onClick={resetInvoice} variant="link">
-                Reset
+              {isExpired ? (
+                <Button mt={3} onClick={generateInvoice}>
+                  Refresh
+                </Button>
+              ) : (
+                <Button
+                  mt={3}
+                  onClick={() => {
+                    navigator.clipboard.writeText(invoiceData.lnInvoice);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 1000);
+                  }}
+                  variant="link"
+                >
+                  {copied ? "Copied" : "Copy"}
+                </Button>
+              )}
+              <Button ml={2} mt={3} onClick={resetInvoice} variant="link">
+                Go Back
               </Button>
             </>
           )}

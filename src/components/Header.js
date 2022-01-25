@@ -34,12 +34,10 @@ export default function Header() {
       </Link>
       {user.isLoggedIn !== undefined && !user.isLoggedIn && (
         <Link href={STREAM_LABS_AUTH}>
-          <a>
-            <Button variant="secondary" mt={2}>
-              <Text display={["none", "block"]}>Login with Streamlabs</Text>
-              <Text display={["block", "none"]}>Login</Text>
-            </Button>
-          </a>
+          <Button variant="secondary" mt={2}>
+            <Text display={["none", "block"]}>Login with Streamlabs</Text>
+            <Text display={["block", "none"]}>Login</Text>
+          </Button>
         </Link>
       )}
     </Flex>
