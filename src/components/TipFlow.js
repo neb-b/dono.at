@@ -221,7 +221,13 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
           )}
           {!invoiceData && (
             <>
-              <Box as="form" onSubmit={generateInvoice}>
+              <Box
+                as="form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  generateInvoice();
+                }}
+              >
                 <Box>
                   <Label htmlFor="donation_amount">
                     Amount (USD){" "}
