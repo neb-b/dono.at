@@ -58,7 +58,7 @@ export async function createOrUpdateUser({
           access_token,
         };
 
-    await userRef.set({ userSetPayload }, (err) => {
+    await userRef.set(userSetPayload, (err) => {
       if (err) {
         throw err;
       }
