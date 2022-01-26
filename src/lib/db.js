@@ -32,9 +32,13 @@ export async function createOrUpdateUser({
     thumbnail,
     primary,
   },
-  ...rest
+  youtube,
 }) {
   const userRef = db.ref(`users/${username}`);
+  let youtubeId;
+  if (primary === "youtube") {
+    youtubeId = youtube.id;
+  }
 
   try {
     let dbUserSnapshot = await userRef.once("value");
@@ -47,14 +51,14 @@ export async function createOrUpdateUser({
           display_name,
           tip_min: 0.1,
           primary,
-          rest,
+          ...(youtubeId ? { youtube_id: youtubeId } : {}),
         }
       : {
           ...dbUser,
           access_token,
         };
 
-    await usersRef.set({ [username]: userSetPayload }, (err) => {
+    await userRef.set({ userSetPayload }, (err) => {
       if (err) {
         throw err;
       }
