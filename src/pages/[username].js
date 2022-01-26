@@ -17,10 +17,14 @@ export default function TipPage({ username, apiUser, hasEnabledTips }) {
   const {
     query: { view },
   } = useRouter();
-  const profileLink =
-    user && user.primary === "twitch"
-      ? `twitch.tv/${username}`
-      : `youtube.com/channel/${apiUser?.youtube_id}`;
+  let profileLink;
+  if (user.primary === "twitch") {
+    profileLink = `twitch.tv/${username}`;
+  } else if (user.primary === "facebook") {
+    profileLink = `facebook.com/${username}`;
+  } else {
+    profileLink = `youtube.com/channel/${apiUser?.youtube_id}`;
+  }
 
   const apiUserData = JSON.stringify(apiUser);
   React.useEffect(() => {
