@@ -20,7 +20,7 @@ export default function TipPage({ username, apiUser, hasEnabledTips }) {
   const profileLink =
     user && user.primary === "twitch"
       ? `twitch.tv/${username}`
-      : `youtube.com/channel/${apiUser.youtube_id}`;
+      : `youtube.com/channel/${apiUser?.youtube_id}`;
 
   const apiUserData = JSON.stringify(apiUser);
   React.useEffect(() => {
