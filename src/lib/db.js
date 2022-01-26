@@ -32,6 +32,7 @@ export async function createOrUpdateUser({
     thumbnail,
     primary,
   },
+  ...rest
 }) {
   const userRef = db.ref(`users/${username}`);
 
@@ -46,6 +47,7 @@ export async function createOrUpdateUser({
           display_name,
           tip_min: 0.1,
           primary,
+          rest,
         }
       : {
           ...dbUser,
