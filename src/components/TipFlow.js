@@ -127,7 +127,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
 
   return (
     <Box
-      sx={{ mx: "auto", maxWidth: invoiceData ? ["500px"] : ["420px"], pb: 4 }}
+      sx={{ mx: "auto", maxWidth: invoiceData ? ["500px"] : ["500px"], pb: 4 }}
     >
       {paid && (
         <Box>
@@ -222,6 +222,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
           {!invoiceData && (
             <>
               <Box
+                maxWidth={["100%", 400]}
                 as="form"
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -315,7 +316,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
                           })
                         }
                       >
-                        Edit Your Info
+                        Edit Profile
                       </Button>
                     )}
                   </Flex>

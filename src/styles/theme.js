@@ -21,6 +21,7 @@ const inputStyles = {
   cursor: "text",
   outline: "none",
   position: "relative",
+  // maxWidth: ["100%", "400px"],
 
   "::-webkit-search-decoration:hover, ::-webkit-search-cancel-button:hover": {
     cursor: "pointer",

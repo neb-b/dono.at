@@ -68,9 +68,9 @@ export default function Tip({ username }) {
   }
 
   return (
-    <Box pb={5} maxWidth={460} mx="auto">
-      <>
-        <Box maxWidth={460} mx="auto">
+    <Box pb={5} maxWidth={500} mx="auto">
+      <Box maxWidth={["100%", 400]}>
+        <Box>
           <Label htmlFor="dono_link">Your Dono Link</Label>
           <Flex>
             <Input
@@ -215,7 +215,7 @@ export default function Tip({ username }) {
             </Box>
           )}
         </Box>
-      </>
+      </Box>
     </Box>
   );
 }
