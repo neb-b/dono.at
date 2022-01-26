@@ -99,16 +99,11 @@ export async function updateUserData(
         color: profileColor,
       };
 
-      await usersRef.set(
-        {
-          [username]: newUser,
-        },
-        (err) => {
-          if (err) {
-            throw err;
-          }
+      await userRef.set(newUser, (err) => {
+        if (err) {
+          throw err;
         }
-      );
+      });
 
       newUser.isLoggedIn = true;
 
