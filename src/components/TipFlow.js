@@ -226,7 +226,6 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
                 as="form"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  generateInvoice();
                 }}
               >
                 <Box>
@@ -310,6 +309,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
                         mt={[3, 0]}
                         ml={[0, "auto"]}
                         variant="link"
+                        button="button"
                         onClick={() =>
                           router.push({
                             pathname: router.query.username,

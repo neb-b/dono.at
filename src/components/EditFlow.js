@@ -42,10 +42,11 @@ export default function Tip({ username }) {
   }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
 
   const handleCopy = () => {
-    copyRef.current.select();
+    console.log("coppy", copyRef.current);
     navigator.clipboard.writeText(donoLink);
 
     setShowCheckMark(true);
+    copyRef.current.select();
     setTimeout(() => {
       setShowCheckMark(false);
     }, 1500);
@@ -82,7 +83,8 @@ export default function Tip({ username }) {
               placeholder="Strike Username"
               autocomplete="off"
               value={donoLink}
-              disabled
+              onChange={() => {}}
+              onFocus={(event) => event.target.select()}
               sx={{
                 border: "1px dashed white",
                 backgroundColor: "black !important",
