@@ -11,6 +11,7 @@ const Head = (props) => {
         property="og:description"
         content="Receive Bitcoin donations with Streamlabs alerts"
       />
+      <meta property="og:type" content="website" />
 
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </NextHead>
