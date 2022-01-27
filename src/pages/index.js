@@ -17,6 +17,29 @@ export default function Home() {
           <Text fontSize={[48, 64]} lineHeight={1.1} fontWeight="bold">
             Lightning Fast Livestream Donations
           </Text>
+          {/* <Text
+            fontWeight="bold"
+            color="white"
+            fontSize={24}
+            sx={{
+              ":hover": {
+                color: "api",
+              },
+            }}
+          >
+            <Flex
+              alignItems="flex-start"
+              color={"primary"}
+              sx={{
+                ":hover": {
+                  color: "primaryLight",
+                  // opacity: user.color ? 0.9 : 1,
+                },
+              }}
+            >
+              dono.at
+            </Flex>
+          </Text> */}
 
           <Link href="/cheese__omelette" passHref>
             <Button variant="primary" mt={4}>
