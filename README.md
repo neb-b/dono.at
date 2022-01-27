@@ -1,3 +1,9 @@
+<h1 align="center">
+<img src="https://github.com/neb-b/dono.at/blob/master/docs/og.png" width="800"/>
+<br>
+<br>
+</h1>
+
 ### Receive instant Bitcoin donations with Streamlabs alerts
 
 This project allows users to receive lightning tips and display them on stream like regular donations. Just login with Streamlabs and add your strike username. It is built using the [Strike API](https://developer.strike.me) and the [Streamlabs API](https://developer.streamlabs.com)
