@@ -35,7 +35,16 @@ export default function Header() {
             },
           }}
         >
-          <Flex alignItems="flex-start">
+          <Flex
+            alignItems="flex-start"
+            color={user.color || "primary"}
+            sx={{
+              ":hover": {
+                color: user.color || "primaryLight",
+                opacity: user.color ? 0.9 : 1,
+              },
+            }}
+          >
             dono.at
             {router.pathname !== "/" && (
               <Text display="inline" ml={1}>

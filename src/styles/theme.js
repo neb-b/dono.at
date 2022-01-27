@@ -1,3 +1,19 @@
+const colors = {
+  primaryText: "white",
+  black: "#000e1a",
+  gray: "rgba(235,235,245,0.6)",
+  gray18: "rgba(235,235,245,0.18)",
+  white: "#fff",
+  blue: "#007ce0",
+  navy: "#004175",
+  api: "#CCFF00",
+  apiLight: "rgb(219, 255, 77)",
+  primary: "#fdaa26",
+  primaryLight: "#de8a02",
+  // primary: "#64dfdf",
+  // primaryLight: "#72efdd",
+};
+
 const fontStyles = {
   fontFamily: "body",
   lineHeight: "body",
@@ -21,7 +37,6 @@ const inputStyles = {
   cursor: "text",
   outline: "none",
   position: "relative",
-  // maxWidth: ["100%", "400px"],
 
   "::-webkit-search-decoration:hover, ::-webkit-search-cancel-button:hover": {
     cursor: "pointer",
@@ -54,30 +69,22 @@ const buttonFontStyle = {
 };
 
 const theme = {
+  colors,
   fonts: {
     body: "Montserrat, Futura, system-ui, sans-serif",
   },
-  colors: {
-    primaryText: "white",
-    black: "#000e1a",
-    gray: "rgba(235,235,245,0.6)",
-    gray18: "rgba(235,235,245,0.18)",
-    white: "#fff",
-    blue: "#007ce0",
-    navy: "#004175",
-    api: "#CCFF00",
-    apiLight: "rgb(219, 255, 77)",
-  },
+
   buttons: {
     primary: {
       ...buttonFontStyle,
       color: "black",
       bg: "black",
-      backgroundColor: "#CCFF00",
+      backgroundColor: "#FCA311",
       fontWeight: "bold",
 
       ":hover": {
-        bg: "apiLight",
+        bg: "#de8a02",
+        // boxShadow: "-8px 8px 0px 0px white",
       },
     },
     secondary: {
@@ -91,7 +98,7 @@ const theme = {
       bg: "transparent",
       border: "1px solid white",
       ":hover": {
-        bg: "white",
+        backgroundColor: "white",
         color: "black",
         borderColor: "white",
       },

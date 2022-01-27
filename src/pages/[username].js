@@ -69,7 +69,7 @@ export default function TipPage({ username, apiUser, hasEnabledTips }) {
                   <Text
                     fontSize={12}
                     color="gray"
-                    sx={{ ":hover": { color: "api" } }}
+                    sx={{ ":hover": { color: user.color || "api" } }}
                   >
                     {profileLink}
                   </Text>

@@ -25,7 +25,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
   const [copied, setCopied] = React.useState(false);
   const invoiceId = invoiceData?.invoiceId;
   const isExpired = expires <= 0;
-  const userColor = color || "#CCFF00";
+  const userColor = color || "#fdaa26";
 
   async function generateInvoice(isRefresh = false) {
     if (!isRefresh) {
@@ -308,7 +308,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
                       <Button
                         mt={[3, 0]}
                         ml={[0, "auto"]}
-                        variant="link"
+                        variant="outline"
                         button="button"
                         onClick={() =>
                           router.push({

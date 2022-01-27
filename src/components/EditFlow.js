@@ -38,11 +38,10 @@ export default function Tip({ username }) {
       setStrikeUsername(strike_username);
     }
 
-    setProfileColor(color || "#CCFF00");
+    setProfileColor(color || "#fdaa26");
   }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
 
   const handleCopy = () => {
-    console.log("coppy", copyRef.current);
     navigator.clipboard.writeText(donoLink);
 
     setShowCheckMark(true);
@@ -83,12 +82,16 @@ export default function Tip({ username }) {
               placeholder="Strike Username"
               autocomplete="off"
               value={donoLink}
+              data-lpignore={true}
               onChange={() => {}}
               onFocus={(event) => event.target.select()}
               sx={{
                 border: "1px dashed white",
                 backgroundColor: "black !important",
                 opacity: `1 !important`,
+                ":hover": {
+                  cursor: "grab",
+                },
               }}
             />
             <Button
@@ -120,6 +123,7 @@ export default function Tip({ username }) {
             name="strike_username"
             placeholder="Strike Username"
             autocomplete="off"
+            data-lpignore={true}
             value={strikeUsername}
           />
 
@@ -150,6 +154,7 @@ export default function Tip({ username }) {
             placeholder="0.1"
             autocomplete="off"
             value={tipAmount}
+            data-lpignore={true}
           />
         </Box>
         <Box mt={4}>
@@ -159,6 +164,7 @@ export default function Tip({ username }) {
               opacity: `1 !important`,
               padding: 0,
 
+              cursor: "grab",
               "::-webkit-color-swatch": {
                 border: "none",
                 borderRadius: 10,
