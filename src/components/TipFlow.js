@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import { Label, Input, Textarea } from "@rebass/forms/styled-components";
-import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
+import { Button, Text, Box, Flex } from "rebass/styled-components";
 
 import { getButtonTextColorFromBg } from "components/EditFlow";
 

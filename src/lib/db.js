@@ -1,9 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-import { getDatabase } from "firebase-admin/database";
 import jwt from "jsonwebtoken";
 import db from "./firebase-admin";
-
-const usersRef = db.ref("users");
 
 const verifyAuthToken = (authToken, accessToken) => {
   if (!authToken) {

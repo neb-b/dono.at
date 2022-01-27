@@ -1,48 +1,15 @@
 import Link from "next/link";
-import Image from "next/image";
 import styled from "styled-components";
 import { Box, Flex, Button, Text } from "rebass/styled-components";
-// import DonationAsset from "/donation.mp4";
-
-const StyledLink = styled.a`
-  bg: api;
-  color: black;
-`;
 
 export default function Home() {
   return (
     <Box my={6} maxWidth={800} mx="auto">
       <Flex alignItems="center" flexDirection={["column", "column", "column"]}>
-        <Box
-        // p={4}
-        >
+        <Box>
           <Text fontSize={[48, 64]} lineHeight={1.1} fontWeight="bold">
             Lightning Fast Livestream Donations
           </Text>
-          {/* <Text
-            mb={4}
-            fontWeight="bold"
-            color="white"
-            fontSize={24}
-            sx={{
-              ":hover": {
-                color: "api",
-              },
-            }}
-          >
-            <Flex
-              alignItems="flex-start"
-              color={"primary"}
-              sx={{
-                ":hover": {
-                  color: "primaryLight",
-                  // opacity: user.color ? 0.9 : 1,
-                },
-              }}
-            >
-              dono.at
-            </Flex>
-          </Text> */}
 
           <Link href="/cheese__omelette" passHref>
             <Button variant="primary" mt={4}>
@@ -74,7 +41,7 @@ export default function Home() {
               loop
               muted
             >
-              <source src="/assets/test.mp4#t=0.1" type="video/mp4" />
+              <source src="/assets/donation.mp4#t=0.1" type="video/mp4" />
             </Box>
           </Box>
           <Box flexBasis={"50%"} flexGrow={0} ml={3} mt={[5, 4]}>

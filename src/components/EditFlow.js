@@ -1,11 +1,10 @@
 import React from "react";
 import axios from "axios";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import Checkmark from "components/CheckIcon";
 import Copy from "components/CopyIcon";
-import { Label, Input, Textarea } from "@rebass/forms/styled-components";
+import { Label, Input } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 
 import { UserContext } from "pages/_app";
