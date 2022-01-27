@@ -10,6 +10,7 @@ const colors = {
   apiLight: "rgb(219, 255, 77)",
   primary: "#fdaa26",
   primaryLight: "#de8a02",
+  secondary: "#46e0b5",
   // primary: "#64dfdf",
   // primaryLight: "#72efdd",
 };

@@ -14,13 +14,16 @@ export default function Home() {
     <Box my={6} maxWidth={800} mx="auto">
       <Flex alignItems="center" flexDirection={["column", "column", "column"]}>
         <Box>
-          <Text fontSize={64} lineHeight={1.1} fontWeight="bold">
+          <Text fontSize={[48, 64]} lineHeight={1.1} fontWeight="bold">
             Lightning Fast Livestream Donations
           </Text>
 
           <Link href="/cheese__omelette" passHref>
             <Button variant="primary" mt={4}>
-              <Text>View Example Tip Page</Text>
+              <Text display={["none", "block"]}>
+                View Example Donation Page
+              </Text>
+              <Text display={["block", "none"]}>View Example Page</Text>
             </Button>
           </Link>
         </Box>
@@ -48,11 +51,16 @@ export default function Home() {
               <source src="/assets/donation.mp4" type="video/mp4" />
             </Box>
           </Box>
-          <Box flexBasis={"50%"} flexGrow={0} ml={3} mt={4}>
-            <Text fontSize={32} fontWeight="bold">
-              Instant Bitcoin
+          <Box flexBasis={"50%"} flexGrow={0} ml={3} mt={[5, 4]}>
+            <Text fontSize={32} fontWeight="bold" color="secondary">
+              <Text display="inline-block" color="secondary">
+                Instant
+              </Text>{" "}
+              <Text display="inline-block" color="secondary">
+                Bitcoin
+              </Text>
               <br />
-              Donation Alerts.
+              Donation Alerts
             </Text>
             <Text fontSize={24} mt={3} fontWeight="normal">
               Receive Bitcoin donations and convert them to $USD instantly.
