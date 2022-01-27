@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <UserContext.Provider value={{ setUser, user }}>
       <ThemeProvider theme={theme}>
-        <Box sx={{ visibility: mounted ? "" : "hidden" }}>
+        {mounted && (
           <Flex flexDirection="column" minHeight="100vh">
             <Box px={[4]}>
               <Header />
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
             </Box>
             <Footer />
           </Flex>
-        </Box>
+        )}
       </ThemeProvider>
     </UserContext.Provider>
   );
