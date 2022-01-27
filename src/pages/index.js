@@ -48,7 +48,7 @@ export default function Home() {
               loop
               muted
             >
-              <source src="/assets/donation.mp4" type="video/mp4" />
+              <source src="/assets/donation.mp4#t=0.1" type="video/mp4" />
             </Box>
           </Box>
           <Box flexBasis={"50%"} flexGrow={0} ml={3} mt={[5, 4]}>
