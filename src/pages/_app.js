@@ -12,22 +12,17 @@ export const UserContext = React.createContext();
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = React.useState({});
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
 
   return (
     <UserContext.Provider value={{ setUser, user }}>
       <ThemeProvider theme={theme}>
-        {mounted && (
-          <Flex flexDirection="column" minHeight="100vh">
-            <Box px={[4]}>
-              <Header />
-              <Component {...pageProps} />
-            </Box>
-            <Footer />
-          </Flex>
-        )}
+        <Flex flexDirection="column" minHeight="100vh">
+          <Box px={[4]}>
+            <Header />
+            <Component {...pageProps} />
+          </Box>
+          <Footer />
+        </Flex>
       </ThemeProvider>
     </UserContext.Provider>
   );
