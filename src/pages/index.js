@@ -13,11 +13,14 @@ export default function Home() {
   return (
     <Box my={6} maxWidth={800} mx="auto">
       <Flex alignItems="center" flexDirection={["column", "column", "column"]}>
-        <Box>
+        <Box
+        // p={4}
+        >
           <Text fontSize={[48, 64]} lineHeight={1.1} fontWeight="bold">
             Lightning Fast Livestream Donations
           </Text>
           {/* <Text
+            mb={4}
             fontWeight="bold"
             color="white"
             fontSize={24}
