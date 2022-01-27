@@ -1,6 +1,6 @@
-### Receive Lightning tips live on stream using the Strike Partner API
+### Receive instant Bitcoin donations with Streamlabs alerts.
 
-This project allows users to receive lightning tips and display them on stream like regular donations. Just login with Streamlabs and add your strike username.
+This project allows users to receive lightning tips and display them on stream like regular donations. Just login with Streamlabs and add your strike username. It is built using the [Strike API](https://developer.strike.me) and the [Streamlabs API](https://developer.streamlabs.com)
 
 [https://dono.at](https://dono.at)
 
