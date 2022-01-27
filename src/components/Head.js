@@ -1,20 +1,12 @@
 import NextHead from "next/head";
-// import styleSheet from "styled-components/lib/models/StyleSheet";
 
 const Head = (props) => {
-  if (!process.env.browser) {
-    let styles = (
-      <style>
-        {styleSheet
-          .rules()
-          .map((rule) => rule.cssText)
-          .join("\n")}
-      </style>
-    );
-    props.children = props.children || [];
-    props.children.push(styles);
-  }
-  return <NextHead {...props} />;
+  return (
+    <NextHead>
+      <title>dono.at</title>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    </NextHead>
+  );
 };
 
 export default Head;

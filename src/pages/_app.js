@@ -2,6 +2,7 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { Flex, Box } from "rebass/styled-components";
 import Header from "components/Header";
+import Head from "components/Head";
 import Footer from "components/Footer";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/700.css";
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <UserContext.Provider value={{ setUser, user }}>
+      <Head />
       <ThemeProvider theme={theme}>
         <Flex flexDirection="column" minHeight="100vh">
           <Box px={[4]}>
