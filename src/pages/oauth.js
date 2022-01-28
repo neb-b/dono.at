@@ -46,7 +46,10 @@ export async function getServerSideProps(context) {
       access_token,
     });
 
-    const authToken = jwt.sign({ access_token }, process.env.JWT_SECRET);
+    const authToken = jwt.sign(
+      { access_token, username: streamlabs.username },
+      process.env.JWT_SECRET
+    );
 
     context.res.setHeader("set-cookie", `auth_token=${authToken}`);
 

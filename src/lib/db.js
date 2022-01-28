@@ -21,6 +21,23 @@ const verifyAuthToken = (authToken, accessToken) => {
     : false;
 };
 
+const getDataFromAuthToken = (authToken) => {
+  if (!authToken) {
+    return;
+  }
+
+  let decodedAuthToken;
+  jwt.verify(authToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return false;
+    }
+
+    decodedAuthToken = decoded;
+  });
+
+  return decodedAuthToken;
+};
+
 export async function createOrUpdateUser({
   access_token,
   streamlabs: {
@@ -126,6 +143,25 @@ export async function getProfileData(username, authToken) {
         const isLoggedIn = verifyAuthToken(authToken, access_token);
         user.isLoggedIn = isLoggedIn;
 
+        resolve(user);
+      } else {
+        reject("user_not_found");
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function getProfileFromAuthToken(authToken) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { access_token, username } = getDataFromAuthToken(authToken);
+      const userRef = db.ref(`users/${username}`);
+      const dbUserSnapShot = await userRef.once("value");
+      const dbUser = dbUserSnapShot.val();
+
+      if (dbUser) {
         resolve(user);
       } else {
         reject("user_not_found");

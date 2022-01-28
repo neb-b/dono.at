@@ -1,5 +1,4 @@
 import Link from "next/link";
-import styled from "styled-components";
 import { Box, Flex, Button, Text } from "rebass/styled-components";
 
 export default function Home() {
@@ -44,7 +43,7 @@ export default function Home() {
               <source src="/assets/donation.mp4#t=0.1" type="video/mp4" />
             </Box>
           </Box>
-          <Box flexBasis={"50%"} flexGrow={0} ml={3} mt={[5, 4]}>
+          <Box flexBasis={"45%"} flexGrow={0} ml={3} mt={[5, 4]}>
             <Text fontSize={32} fontWeight="bold" color="secondary">
               <Text display="inline-block" color="secondary">
                 Instant
