@@ -100,10 +100,11 @@ export async function getServerSideProps(context) {
     // Determine if it's the user's own page
     // If it is we only need to go to the db once
     if (auth_token) {
+      let user;
       try {
-        const { access_token, ...user } = await getUserFromAuthToken(
-          auth_token
-        );
+        const { access_token, ...userFromAuthToken } =
+          await getUserFromAuthToken(auth_token);
+        user = userFromAuthToken;
       } catch (e) {
         const tipPageUser = await getUser(username);
         if (!tipPageUser) {
