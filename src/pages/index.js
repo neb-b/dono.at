@@ -81,7 +81,6 @@ export async function getServerSideProps(context) {
       const { username } = getDataFromAuthToken(auth_token);
 
       if (username) {
-        console.log("username", username);
         return { props: { user: { isLoggedIn } } };
       }
     }

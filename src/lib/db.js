@@ -40,12 +40,7 @@ export const getDataFromAuthToken = (authToken) => {
 
 export async function createOrUpdateUser({
   access_token,
-  streamlabs: {
-    username = "cheese__omelette",
-    display_name,
-    thumbnail,
-    primary,
-  },
+  streamlabs: { username, display_name, thumbnail, primary },
   youtube,
 }) {
   const userRef = db.ref(`users/${username}`);
