@@ -1,19 +1,12 @@
 import React from "react";
-import {
-  Flex,
-  Button,
-  Text,
-  Box,
-  Link,
-  Heading,
-} from "rebass/styled-components";
+import { Flex, Button, Text, Link } from "rebass/styled-components";
+
+import { useRouter } from "next/router";
 import { UserContext } from "pages/_app";
 
-import router, { useRouter } from "next/router";
-
-export default function Header() {
+export default function Header({ user, color }) {
+  const { contextUser = {}, setContextUser } = React.useContext(UserContext);
   const router = useRouter();
-  const { user } = React.useContext(UserContext);
   const STREAM_LABS_AUTH = `https://streamlabs.com/api/v1.0/authorize?client_id=${process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI}&scope=donations.create+alerts.create&response_type=code`;
 
   return (
@@ -37,11 +30,11 @@ export default function Header() {
         >
           <Flex
             alignItems="flex-start"
-            color={user.color || "primary"}
+            color={contextUser.color || color || "primary"}
             sx={{
               ":hover": {
-                color: user.color || "primaryLight",
-                opacity: user.color ? 0.9 : 1,
+                color: contextUser.color || color || "primaryLight",
+                opacity: contextUser.color || color ? 0.9 : 1,
               },
             }}
           >
@@ -54,8 +47,7 @@ export default function Header() {
           </Flex>
         </Text>
       </Link>
-      {(router.pathname === "/" ||
-        (user.isLoggedIn !== undefined && !user.isLoggedIn)) && (
+      {user && !user.isLoggedIn && (
         <Link href={STREAM_LABS_AUTH}>
           <Button variant="secondary" mt={2}>
             <Text display={["none", "block"]}>Login with Streamlabs</Text>

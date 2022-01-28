@@ -1,4 +1,3 @@
-import axios from "axios";
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,92 +6,83 @@ import Edit from "components/EditFlow";
 import { Text, Box, Flex } from "rebass/styled-components";
 import * as cookie from "cookie";
 import Image from "next/image";
+import Layout from "components/Layout";
 
-import { getProfileData } from "../lib/db";
+import { getUserFromAuthToken, getDataFromAuthToken, getUser } from "../lib/db";
 
-import { UserContext } from "./_app";
-
-export default function TipPage({ username, apiUser, hasEnabledTips }) {
-  const { user, setUser } = React.useContext(UserContext);
+export default function TipPage({ user, tipPage }) {
   const {
     query: { view },
   } = useRouter();
   let profileLink;
-  if (user.primary === "twitch") {
-    profileLink = `twitch.tv/${username}`;
-  } else if (user.primary === "facebook") {
-    profileLink = `facebook.com/${username}`;
-  } else {
-    profileLink = `youtube.com/channel/${apiUser?.youtube_id}`;
+  if (tipPage) {
+    if (tipPage.primary === "twitch") {
+      profileLink = `twitch.tv/${tipPage.username}`;
+    } else if (tipPage.primary === "facebook") {
+      profileLink = `facebook.com/${tipPage.username}`;
+    } else {
+      profileLink = `youtube.com/channel/${tipPage.youtube_id}`;
+    }
   }
 
-  const apiUserData = JSON.stringify(apiUser);
-  React.useEffect(() => {
-    let userData;
-    try {
-      userData = JSON.parse(apiUserData);
-      setUser(userData);
-    } catch (e) {
-      // redirect to 404
-    }
-  }, [apiUserData, setUser]);
-
   return (
-    <Box sx={{ mx: "auto", maxWidth: "500px", pb: 4 }} mt={[5, 5]}>
-      {user && user.isLoggedIn !== undefined && (
-        <>
-          <Flex mb={4} alignItems="center">
-            <Box
-              sx={{
-                img: {
-                  borderRadius: 10,
-                },
-              }}
-            >
-              <Image
-                alt="Profile picture"
-                height={50}
-                width={50}
-                src={user.thumbnail}
-              />
-            </Box>
-            <Flex ml={[3]} flexDirection="column" justifyContent="center">
-              <Text mt={-2} fontSize={[24, 32]}>
-                {username}
-              </Text>
-              <Link href={`https://${profileLink}`}>
-                <a
-                  style={{
-                    textDecoration: "none",
-                  }}
-                >
-                  <Text
-                    fontSize={12}
-                    color="gray"
-                    sx={{ ":hover": { color: user.color || "api" } }}
-                  >
-                    {profileLink}
-                  </Text>
-                </a>
-              </Link>
-            </Flex>
-          </Flex>
-          {user.isLoggedIn && !view ? (
-            <Edit username={username} {...user} />
-          ) : (
-            <>
-              {hasEnabledTips ? (
-                <Tip username={username} {...user} />
-              ) : (
-                <Text ml={4} mt={4} fontWeight="normal">
-                  This user hasn&apos;t enabled tips yet.
+    <Layout color={tipPage?.color} user={user}>
+      <Box sx={{ mx: "auto", maxWidth: "500px", pb: 4 }} mt={[5, 5]}>
+        {tipPage && (
+          <>
+            <Flex mb={4} alignItems="center">
+              <Box
+                sx={{
+                  img: {
+                    borderRadius: 10,
+                  },
+                }}
+              >
+                <Image
+                  alt="Profile picture"
+                  height={50}
+                  width={50}
+                  src={tipPage.thumbnail}
+                />
+              </Box>
+              <Flex ml={[3]} flexDirection="column" justifyContent="center">
+                <Text mt={-2} fontSize={[24, 32]}>
+                  {tipPage.username}
                 </Text>
-              )}
-            </>
-          )}
-        </>
-      )}
-    </Box>
+                <Link href={`https://${profileLink}`}>
+                  <a
+                    style={{
+                      textDecoration: "none",
+                    }}
+                  >
+                    <Text
+                      fontSize={12}
+                      color="gray"
+                      sx={{ ":hover": { color: user.color || "api" } }}
+                    >
+                      {profileLink}
+                    </Text>
+                  </a>
+                </Link>
+              </Flex>
+            </Flex>
+            {user.isLoggedIn && tipPage.username === user.username && !view ? (
+              <Edit user={user} />
+            ) : (
+              <>
+                {tipPage.strike_username ? (
+                  <Tip user={user} {...tipPage} />
+                ) : (
+                  <Text ml={4} mt={4} fontWeight="normal">
+                    This user hasn&apos;t enabled tips yet.
+                  </Text>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </Box>
+    </Layout>
   );
 }
 
@@ -107,16 +97,53 @@ export async function getServerSideProps(context) {
   }
 
   try {
-    const user = await getProfileData(username, auth_token);
-    if (!user) {
+    // Determine if it's the user's own page
+    // If it is we only need to go to the db once
+    if (auth_token) {
+      const { access_token, ...user } = await getUserFromAuthToken(auth_token);
+
+      const { username: usernameFromAuthToken } =
+        getDataFromAuthToken(auth_token);
+      const isOwnPage = usernameFromAuthToken === username;
+
+      if (isOwnPage) {
+        return {
+          props: {
+            user: {
+              isLoggedIn: true,
+              username: usernameFromAuthToken,
+              ...user,
+            },
+            tipPage: { username, ...user },
+          },
+        };
+      } else {
+        // Need to get user and tipPage separately
+        const tipPageUser = await getUser(username);
+        if (!tipPageUser) {
+          throw "user_not_found";
+        }
+
+        const { access_token, ...tipPage } = tipPageUser;
+        return {
+          props: {
+            user: { ...user, isLoggedIn: true },
+            tipPage: { ...tipPage, username },
+          },
+        };
+      }
+    }
+
+    const tipPageUser = await getUser(username);
+    if (!tipPageUser) {
       return { notFound: true };
     }
 
+    const { access_token, ...tipPage } = await getUser(username);
     return {
       props: {
-        username,
-        apiUser: user || undefined,
-        hasEnabledTips: Boolean(user.strike_username),
+        tipPage: { ...tipPage, username },
+        user: { isLoggedIn: false },
       },
     };
   } catch (error) {

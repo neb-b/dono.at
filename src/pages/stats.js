@@ -1,66 +1,89 @@
-import axios from "axios";
 import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import Tip from "components/TipFlow";
-import Edit from "components/EditFlow";
-import { Text, Box, Flex } from "rebass/styled-components";
+
 import * as cookie from "cookie";
-import Image from "next/image";
+import { Text, Box, Flex } from "rebass/styled-components";
+import Layout from "components/Layout";
 
-import { getProfileData } from "../lib/db";
+import { getUserFromAuthToken, getStats } from "../lib/db";
 
-import { UserContext } from "./_app";
+export default function TipPage({ user, stats }) {
+  return (
+    <Layout user={user}>
+      <Box sx={{ mx: "auto", maxWidth: ["100%", "350px"], pb: 4 }} mt={[5, 5]}>
+        <Text fontSize={32}>Stats</Text>
+        <Box width="100%" height="1px" bg="gray18" mt={3} />
 
-export default function TipPage({ username, apiUser, hasEnabledTips }) {
-  const { user, setUser } = React.useContext(UserContext);
-  const {
-    query: { view },
-  } = useRouter();
-  let profileLink;
-  if (user.primary === "twitch") {
-    profileLink = `twitch.tv/${username}`;
-  } else if (user.primary === "facebook") {
-    profileLink = `facebook.com/${username}`;
-  } else {
-    profileLink = `youtube.com/channel/${apiUser?.youtube_id}`;
-  }
+        {stats && (
+          <>
+            <Flex justifyContent="space-between" mt={3} fontSize={24}>
+              <Text>Total donated: </Text>
+              <Text display="inline-block" color="secondary">
+                ${stats.totalAmount}
+              </Text>
+            </Flex>
+            <Flex justifyContent="space-between" mt={3} fontSize={24}>
+              <Text>Total donations: </Text>
+              <Text display="inline-block" color="secondary">
+                {stats.totalTxs}
+              </Text>
+            </Flex>
+            <Flex justifyContent="space-between" mt={3} fontSize={24}>
+              <Text>Total users: </Text>
+              <Text display="inline-block" color="secondary">
+                {stats.totalUsers}
+              </Text>
+            </Flex>
 
-  const apiUserData = JSON.stringify(apiUser);
-  React.useEffect(() => {
-    let userData;
-    try {
-      userData = JSON.parse(apiUserData);
-      setUser(userData);
-    } catch (e) {
-      // redirect to 404
-    }
-  }, [apiUserData, setUser]);
-
-  return <Box sx={{ mx: "auto", maxWidth: "500px", pb: 4 }} mt={[5, 5]}></Box>;
+            <Box mt={3}>
+              {stats.txs.map((tx, index) => (
+                <Box
+                  key={tx.id}
+                  mt={index === 0 ? 4 : 4}
+                  sx={{ border: "1px solid gray18" }}
+                >
+                  <Flex alignItems="center">
+                    <Text>${tx.amount}</Text>
+                    <Text ml={2} fontWeight="normal" color="primary">
+                      {tx.username}
+                    </Text>
+                  </Flex>
+                  <Text fontWeight="normal" mt={2}>
+                    {tx.message}
+                  </Text>
+                </Box>
+              ))}
+            </Box>
+          </>
+        )}
+      </Box>
+    </Layout>
+  );
 }
 
 export async function getServerSideProps(context) {
   const { auth_token } = cookie.parse(context.req.headers.cookie || "");
 
   try {
-    const user = await getProfileData(auth_token);
+    const user = await getUserFromAuthToken(auth_token);
     if (!user || user.username !== "cheese__omelette") {
-      throw Error("not_authorized");
     }
+
+    const stats = await getStats();
 
     return {
       props: {
-        username,
         user: user || undefined,
+        stats: stats,
       },
     };
   } catch (e) {
-    return {
-      redirect: {
-        destination: `/`,
-        permanent: false,
-      },
-    };
+    console.log("error", e);
+    return { props: {} };
+    // return {
+    //   redirect: {
+    //     destination: `/`,
+    //     permanent: false,
+    //   },
+    // };
   }
 }

@@ -6,11 +6,11 @@ import { useRouter } from "next/router";
 import { Label, Input, Textarea } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Flex } from "rebass/styled-components";
 
-import { getButtonTextColorFromBg } from "components/EditFlow";
+import { getButtonTextColorFromBg } from "util/color";
 
 const QRCode = dynamic(() => import("./QR"), { ssr: false });
 
-export default function Tip({ username, tip_min, isLoggedIn, color }) {
+export default function Tip({ username, tip_min, color, user }) {
   const router = useRouter();
   const [amount, setAmount] = React.useState(tip_min);
   const [tipAmountError, setTipAmountError] = React.useState(false);
@@ -305,7 +305,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
                     >
                       {loading ? "Submitting..." : "Submit"}
                     </Button>
-                    {isLoggedIn && (
+                    {user.isLoggedIn && user.username === username && (
                       <Button
                         mt={[3, 0]}
                         ml={[0, "auto"]}

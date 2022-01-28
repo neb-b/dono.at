@@ -1,7 +1,6 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import { Flex, Box } from "rebass/styled-components";
-import Header from "components/Header";
 import Head from "components/Head";
 import Footer from "components/Footer";
 import "@fontsource/montserrat/400.css";
@@ -12,15 +11,14 @@ import "styles/globals.css";
 export const UserContext = React.createContext();
 
 function MyApp({ Component, pageProps }) {
-  const [user, setUser] = React.useState({});
+  const [contextUser, setContextUser] = React.useState({});
 
   return (
-    <UserContext.Provider value={{ setUser, user }}>
+    <UserContext.Provider value={{ contextUser, setContextUser }}>
       <Head />
       <ThemeProvider theme={theme}>
         <Flex flexDirection="column" minHeight="100vh">
           <Box px={[4]}>
-            <Header />
             <Component {...pageProps} />
           </Box>
           <Footer />

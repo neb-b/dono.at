@@ -21,7 +21,7 @@ const verifyAuthToken = (authToken, accessToken) => {
     : false;
 };
 
-const getDataFromAuthToken = (authToken) => {
+export const getDataFromAuthToken = (authToken) => {
   if (!authToken) {
     return;
   }
@@ -153,16 +153,16 @@ export async function getProfileData(username, authToken) {
   });
 }
 
-export async function getProfileFromAuthToken(authToken) {
+export async function getUserFromAuthToken(authToken) {
   return new Promise(async (resolve, reject) => {
     try {
-      const { access_token, username } = getDataFromAuthToken(authToken);
+      const { username } = getDataFromAuthToken(authToken);
       const userRef = db.ref(`users/${username}`);
       const dbUserSnapShot = await userRef.once("value");
       const dbUser = dbUserSnapShot.val();
 
       if (dbUser) {
-        resolve(user);
+        resolve(dbUser);
       } else {
         reject("user_not_found");
       }
@@ -198,6 +198,43 @@ export async function logTx({ amount, username, message, date }) {
       });
 
       resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function getStats() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const txsRef = db.ref(`txs`);
+      const txsSnapShot = await txsRef.once("value");
+      const txsMap = txsSnapShot.val();
+
+      const usersRef = db.ref(`users`);
+      const usersSnapShot = await usersRef.once("value");
+      const usersMap = usersSnapShot.val();
+      const totalUsers = Object.keys(usersMap).length;
+
+      let txs = [];
+      Object.keys(txsMap).forEach((key) => {
+        const tx = txsMap[key];
+        txs.push({ ...tx, id: key });
+      });
+
+      const sortedTxs = txs.sort((a, b) => b.date - a.date);
+      const totalAmount = sortedTxs.reduce((acc, tx) => {
+        return acc + Number(tx.amount);
+      }, 0);
+
+      const data = {
+        txs: sortedTxs,
+        totalTxs: txs.length,
+        totalAmount: totalAmount.toFixed(2),
+        totalUsers: totalUsers,
+      };
+
+      resolve(data);
     } catch (error) {
       reject(error);
     }

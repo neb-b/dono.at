@@ -6,30 +6,23 @@ import Checkmark from "components/CheckIcon";
 import Copy from "components/CopyIcon";
 import { Label, Input } from "@rebass/forms/styled-components";
 import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
-
+import { getButtonTextColorFromBg } from "util/color";
 import { UserContext } from "pages/_app";
+import { colors } from "styles/theme";
 
-export const getButtonTextColorFromBg = (hexcolor) => {
-  hexcolor = hexcolor.replace("#", "");
-  var r = parseInt(hexcolor.substr(0, 2), 16);
-  var g = parseInt(hexcolor.substr(2, 2), 16);
-  var b = parseInt(hexcolor.substr(4, 2), 16);
-  var yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 128 ? "black" : "white";
-};
-
-export default function Tip({ username }) {
+export default function EditFlow({ user }) {
   const router = useRouter();
   const copyRef = React.createRef();
-  const { user: apiUser, setUser } = React.useContext(UserContext);
+  const { contextUser, setContextUser } = React.useContext(UserContext);
   const [strikeUsername, setStrikeUsername] = React.useState("");
   const [tipAmount, setTipAmount] = React.useState("");
   const [profileColor, setProfileColor] = React.useState("");
   const [success, setSuccess] = React.useState(false);
   const [showCheckMark, setShowCheckMark] = React.useState(false);
-  const donoLink = `https://dono.at/${username}`;
+  const [hasUpdatedInfo, setHasUpdatedInfo] = React.useState(false);
+  const donoLink = `https://dono.at/${user.username}`;
 
-  const apiUserDataStr = JSON.stringify(apiUser);
+  const apiUserDataStr = JSON.stringify(user);
   React.useEffect(() => {
     const { tip_min, strike_username, color } = JSON.parse(apiUserDataStr);
     setTipAmount(tip_min);
@@ -37,7 +30,7 @@ export default function Tip({ username }) {
       setStrikeUsername(strike_username);
     }
 
-    setProfileColor(color || "#fdaa26");
+    setProfileColor(color || color.primary);
   }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
 
   const handleCopy = () => {
@@ -45,22 +38,29 @@ export default function Tip({ username }) {
 
     setShowCheckMark(true);
     copyRef.current.select();
-    setTimeout(() => {
+    let timeout = setTimeout(() => {
       setShowCheckMark(false);
     }, 1500);
+
+    return () => clearTimeout(timeout);
   };
 
   async function submitUser() {
     try {
       const { data } = await axios.post("/api/user", {
-        username,
+        username: user.username,
         strikeUsername,
         tipAmount,
         profileColor,
       });
 
+      setHasUpdatedInfo(true);
       setSuccess(true);
-      setUser(data);
+      setContextUser(data);
+
+      setTimeout(() => {
+        setSuccess(false);
+      }, 4000);
     } catch (error) {
       console.log("error", error);
     }
@@ -126,7 +126,7 @@ export default function Tip({ username }) {
             value={strikeUsername}
           />
 
-          {!apiUser.strike_username && (
+          {!user.strike_username && (
             <Text fontWeight="normal" mt={2}>
               Need a username? Click{" "}
               <Link
@@ -177,7 +177,10 @@ export default function Tip({ username }) {
             }}
             tx="forms.input"
             variant="normal"
-            onChange={(e) => setProfileColor(e.target.value)}
+            onChange={(e) => {
+              setContextUser({ ...contextUser, color: e.target.value });
+              setProfileColor(e.target.value);
+            }}
             id="profile_color"
             name="profile_color"
             autocomplete="off"
@@ -206,12 +209,15 @@ export default function Tip({ username }) {
               variant="outline"
               ml={["0", "auto"]}
               mt={[3, 0]}
-              onClick={() =>
+              onClick={() => {
+                if (!hasUpdatedInfo) {
+                  setContextUser(user);
+                }
                 router.push({
                   pathname: router.query.username,
                   query: { view: "tip" },
-                })
-              }
+                });
+              }}
             >
               View as Guest
             </Button>
