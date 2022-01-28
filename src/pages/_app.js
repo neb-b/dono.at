@@ -13,31 +13,37 @@ import * as gtag from "../lib/gtag";
 
 export const UserContext = React.createContext();
 
+const isProduction = process.env.NODE_ENV === "production";
+
 function MyApp({ Component, pageProps }) {
   const [contextUser, setContextUser] = React.useState({});
   const router = useRouter();
 
   React.useEffect(() => {
-    const handleRouteChange = (url) => {
-      gtag.pageview(url);
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
+    if (isProduction) {
+      const handleRouteChange = (url) => {
+        gtag.pageview(url);
+      };
+      router.events.on("routeChangeComplete", handleRouteChange);
+      return () => {
+        router.events.off("routeChangeComplete", handleRouteChange);
+      };
+    }
   }, [router.events]);
 
   return (
     <UserContext.Provider value={{ contextUser, setContextUser }}>
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-      />
-      <Script
-        id="gtag-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+      {isProduction && (
+        <>
+          <Script
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+          />
+          <Script
+            id="gtag-init"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
@@ -45,8 +51,10 @@ function MyApp({ Component, pageProps }) {
               page_path: window.location.pathname,
             });
           `,
-        }}
-      />
+            }}
+          />
+        </>
+      )}
       <Head />
       <ThemeProvider theme={theme}>
         <Flex flexDirection="column" minHeight="100vh">
