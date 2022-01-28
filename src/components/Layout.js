@@ -8,10 +8,9 @@ export default function Layout({ color, user, children }) {
   const { asPath } = useRouter();
 
   React.useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_GA_ID);
     ReactGA.initialize(process.env.NEXT_PUBLIC_GA_ID, {
       // cookieDomain: "dono.at",
-      debug: true,
+      // debug: true,
     });
   }, []);
 
