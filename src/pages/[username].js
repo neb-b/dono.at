@@ -100,7 +100,40 @@ export async function getServerSideProps(context) {
     // Determine if it's the user's own page
     // If it is we only need to go to the db once
     if (auth_token) {
-      const { access_token, ...user } = await getUserFromAuthToken(auth_token);
+      try {
+        const { access_token, ...user } = await getUserFromAuthToken(
+          auth_token
+        );
+      } catch (e) {
+        const tipPageUser = await getUser(username);
+        if (!tipPageUser) {
+          throw "user_not_found";
+        }
+
+        const { access_token, ...tipPage } = tipPageUser;
+        return {
+          props: {
+            user: { isLoggedIn: false },
+            tipPage: { ...tipPage, username },
+          },
+        };
+      }
+
+      // This can be removed in the future
+      if (!user) {
+        const tipPageUser = await getUser(username);
+        if (!tipPageUser) {
+          throw "user_not_found";
+        }
+
+        const { access_token, ...tipPage } = tipPageUser;
+        return {
+          props: {
+            user: { isLoggedIn: false },
+            tipPage: { ...tipPage, username },
+          },
+        };
+      }
 
       const { username: usernameFromAuthToken } =
         getDataFromAuthToken(auth_token);
