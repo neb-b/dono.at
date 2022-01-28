@@ -8,7 +8,7 @@ import { Text, Box, Flex } from "rebass/styled-components";
 import * as cookie from "cookie";
 import Image from "next/image";
 
-import { getStats } from "../lib/db";
+import { getProfileData } from "../lib/db";
 
 import { UserContext } from "./_app";
 
