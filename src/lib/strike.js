@@ -10,14 +10,19 @@ const api = axios.create({
   },
 });
 
-export async function createInvoice({ amount, username, streamer_username }) {
+export async function createInvoice({
+  amount,
+  username,
+  streamer_username,
+  message,
+}) {
   return new Promise(async (resolve, reject) => {
     try {
       const {
         data: { invoiceId },
       } = await api.post(`/invoices/handle/${username}`, {
         amount: { currency: "USD", amount },
-        description: `Donation to ${streamer_username}`,
+        description: `dono.at - ${message}`,
       });
 
       const { data } = await api.post(`/invoices/${invoiceId}/quote`);

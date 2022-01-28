@@ -39,6 +39,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
     const { data } = await axios.post("/api/invoice", {
       username,
       amount,
+      message,
     });
 
     setExpires(data.expirationInSec);
@@ -79,7 +80,7 @@ export default function Tip({ username, tip_min, isLoggedIn, color }) {
   };
 
   const handleMessage = (newMsg) => {
-    if (newMsg.length > 254) {
+    if (newMsg.length > 254 - "dono.at - ".length) {
       setMsgError("Maximum message length reached");
       return;
     }

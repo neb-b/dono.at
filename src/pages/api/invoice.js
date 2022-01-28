@@ -4,7 +4,7 @@ import { createInvoice } from "../../lib/strike";
 
 async function handler(req, res) {
   const {
-    body: { username, amount },
+    body: { username, amount, message },
   } = req;
 
   try {
@@ -13,6 +13,7 @@ async function handler(req, res) {
       username: strike_username,
       amount,
       streamer_username: username,
+      message,
     });
     res.status(200).json(data);
   } catch (error) {
