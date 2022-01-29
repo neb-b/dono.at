@@ -42,8 +42,21 @@ export default function TipPage({ user, stats }) {
                   sx={{ border: "1px solid gray18" }}
                 >
                   <Flex alignItems="center">
-                    <Text>${tx.amount}</Text>
-                    <Text ml={2} fontWeight="normal" color="primary">
+                    <Text>
+                      ${tx.amount}{" "}
+                      <Text display="inline-block" fontWeight="normal">
+                        {tx.from ? (
+                          <>
+                            from <Text display="inline-block">{tx.from}</Text>{" "}
+                            to{" "}
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </Text>{" "}
+                      {tx.usrname}
+                    </Text>
+                    <Text ml={2} color="primary">
                       {tx.username}
                     </Text>
                   </Flex>

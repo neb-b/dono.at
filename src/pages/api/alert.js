@@ -28,7 +28,7 @@ async function apiRouteHandler(req, res) {
       }
     );
 
-    await logTx({ amount, username, message, date: Date.now() });
+    await logTx({ amount, username, from, message, date: Date.now() });
 
     res.status(200).json({ data });
   } catch (error) {

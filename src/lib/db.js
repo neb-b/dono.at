@@ -181,7 +181,7 @@ export async function getUser(username) {
   });
 }
 
-export async function logTx({ amount, username, message, date }) {
+export async function logTx({ amount, username, message, date, from }) {
   return new Promise(async (resolve, reject) => {
     try {
       const txRef = db.ref(`txs/${uuidv4()}`);
@@ -190,6 +190,7 @@ export async function logTx({ amount, username, message, date }) {
         message,
         date,
         username,
+        from,
       });
 
       resolve();
