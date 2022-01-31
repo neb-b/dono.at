@@ -7,4 +7,7 @@ module.exports = {
       "platform-lookaside.fbsbx.com",
     ],
   },
+  publicRuntimeConfig: {
+    BUGSNAG_API_KEY: process.env.BUGSNAG_API_KEY,
+  },
 };
