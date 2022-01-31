@@ -1,5 +1,4 @@
-import axios from "axios";
-import { getAccessToken, getUser } from "../../lib/db";
+import { getUser } from "../../lib/db";
 import { createInvoice } from "../../lib/strike";
 
 async function handler(req, res) {

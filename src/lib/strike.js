@@ -22,7 +22,7 @@ export async function createInvoice({
         data: { invoiceId },
       } = await api.post(`/invoices/handle/${username}`, {
         amount: { currency: "USD", amount },
-        description: `dono.at - ${message}`,
+        description: message ? `dono.at - ${message}` : "dono.at",
       });
 
       const { data } = await api.post(`/invoices/${invoiceId}/quote`);
