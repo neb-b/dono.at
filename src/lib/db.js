@@ -60,6 +60,7 @@ export async function createOrUpdateUser({
           display_name,
           tip_min: 0.1,
           primary,
+          date_joined: Date.now(),
           ...(youtubeId ? { youtube_id: youtubeId } : {}),
         }
       : {
@@ -210,7 +211,13 @@ export async function getStats() {
       const usersRef = db.ref(`users`);
       const usersSnapShot = await usersRef.once("value");
       const usersMap = usersSnapShot.val();
-      const totalUsers = Object.keys(usersMap).length;
+      let users = [];
+      Object.keys(usersMap).forEach((key) => {
+        const user = { username: key, ...usersMap[key] };
+        users.push(user);
+      });
+
+      users = users.sort((a, b) => b.date_joined - a.date_joined);
 
       let txs = [];
       Object.keys(txsMap).forEach((key) => {
@@ -227,7 +234,7 @@ export async function getStats() {
         txs: sortedTxs,
         totalTxs: txs.length,
         totalAmount: totalAmount.toFixed(2),
-        totalUsers: totalUsers,
+        users,
       };
 
       resolve(data);

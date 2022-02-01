@@ -1,15 +1,18 @@
 import React from "react";
 
 import * as cookie from "cookie";
-import { Text, Box, Flex } from "rebass/styled-components";
+import Link from "next/link";
+import { Text, Box, Flex, Button } from "rebass/styled-components";
 import Layout from "components/Layout";
 
 import { getUserFromAuthToken, getStats } from "../lib/db";
 
 export default function TipPage({ user, stats }) {
+  const [mode, setMode] = React.useState("donations");
+
   return (
     <Layout user={user}>
-      <Box sx={{ mx: "auto", maxWidth: ["100%", "350px"], pb: 4 }} mt={[5, 5]}>
+      <Box sx={{ mx: "auto", maxWidth: ["100%", "400px"], pb: 4 }} mt={[5, 5]}>
         <Text fontSize={32}>Stats</Text>
         <Box width="100%" height="1px" bg="gray18" mt={3} />
 
@@ -30,19 +33,56 @@ export default function TipPage({ user, stats }) {
             <Flex justifyContent="space-between" mt={3} fontSize={24}>
               <Text>Total users: </Text>
               <Text display="inline-block" color="secondary">
-                {stats.totalUsers}
+                {stats.users.length}
               </Text>
             </Flex>
 
-            <Box mt={3}>
-              {stats.txs.map((tx, index) => (
-                <Box
-                  key={tx.id}
-                  mt={index === 0 ? 4 : 4}
-                  sx={{ border: "1px solid gray18" }}
+            <Box mt={4}>
+              <Flex>
+                <Button
+                  onClick={() => setMode("donations")}
+                  variant={mode === "donations" ? "primary" : "link"}
                 >
-                  <Flex alignItems="center">
-                    <Text>
+                  Donations
+                </Button>
+                <Button
+                  onClick={() => setMode("users")}
+                  ml={2}
+                  variant={mode === "users" ? "primary" : "link"}
+                >
+                  Users
+                </Button>
+              </Flex>
+              {mode === "users" &&
+                stats.users.map((user, index) => (
+                  <Box
+                    key={user.username}
+                    mt={index === 0 ? 4 : 4}
+                    sx={{ border: "1px solid gray18" }}
+                  >
+                    <Link href={`/${user.username}`} passHref>
+                      <Text
+                        fontWeight="normal"
+                        mt={2}
+                        sx={{
+                          cursor: "pointer",
+                          color: user.color,
+                          ":hover": { color: "secondary" },
+                        }}
+                      >
+                        {user.username}
+                      </Text>
+                    </Link>
+                  </Box>
+                ))}
+              {mode === "donations" &&
+                stats.txs.map((tx, index) => (
+                  <Box
+                    key={tx.id}
+                    mt={index === 0 ? 4 : 4}
+                    sx={{ border: "1px solid gray18" }}
+                  >
+                    <Text display="inline-block" mr={2}>
                       ${tx.amount}{" "}
                       <Text display="inline-block" fontWeight="normal">
                         {tx.from ? (
@@ -56,15 +96,14 @@ export default function TipPage({ user, stats }) {
                       </Text>{" "}
                       {tx.usrname}
                     </Text>
-                    <Text ml={2} color="primary">
+                    <Text color="primary" display="inline-block">
                       {tx.username}
                     </Text>
-                  </Flex>
-                  <Text fontWeight="normal" mt={2}>
-                    {tx.message}
-                  </Text>
-                </Box>
-              ))}
+                    <Text fontWeight="normal" mt={2}>
+                      {tx.message}
+                    </Text>
+                  </Box>
+                ))}
             </Box>
           </>
         )}
@@ -90,7 +129,6 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (e) {
-    console.log("error", e);
     return { props: {} };
     // return {
     //   redirect: {
