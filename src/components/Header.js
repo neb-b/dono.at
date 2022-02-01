@@ -4,10 +4,9 @@ import { Flex, Button, Text, Link } from "rebass/styled-components";
 import { useRouter } from "next/router";
 import { UserContext } from "pages/_app";
 
-export default function Header({ user, color }) {
+export default function Header({ user, color, disableLogin }) {
   const { contextUser = {}, setContextUser } = React.useContext(UserContext);
   const router = useRouter();
-  const STREAM_LABS_AUTH = `https://streamlabs.com/api/v1.0/authorize?client_id=${process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI}&scope=donations.create+alerts.create&response_type=code`;
 
   return (
     <Flex
@@ -47,11 +46,18 @@ export default function Header({ user, color }) {
           </Flex>
         </Text>
       </Link>
-      {user && !user.isLoggedIn && (
-        <Link href={STREAM_LABS_AUTH}>
+      {!disableLogin && user && !user.isLoggedIn && (
+        <Link href="/login">
           <Button variant="secondary" mt={2}>
-            <Text display={["none", "block"]}>Login with Streamlabs</Text>
-            <Text display={["block", "none"]}>Login</Text>
+            <Text>Login</Text>
+          </Button>
+        </Link>
+      )}
+      {user && user.isLoggedIn && (
+        <Link href={`/${user.username}`}>
+          <Button variant="link" mt={2}>
+            <Text display={["none", "block"]}>{user.username}</Text>
+            <Text display={["block", "none"]}>Profile</Text>
           </Button>
         </Link>
       )}
