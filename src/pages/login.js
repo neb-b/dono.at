@@ -19,9 +19,16 @@ export default function Login({ user }) {
             Login
           </Text>
 
-          <Box mt={4}>
+          <Box
+            mt={4}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            width="100%"
+          >
             <Link href={STREAM_LABS_AUTH} passHref>
               <Button
+                width={["100%", "auto"]}
                 variant="secondary"
                 sx={{ bg: "#72f7c8", color: "black" }}
                 mt={2}
@@ -30,9 +37,16 @@ export default function Login({ user }) {
               </Button>
             </Link>
           </Box>
-          <Box mt={3} display="flex" flexDirection="column" alignItems="center">
+          <Box
+            mt={2}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            width="100%"
+          >
             <Button
               disabled
+              width={["100%", "auto"]}
               variant="secondary"
               sx={{
                 bg: "#466bfd",
