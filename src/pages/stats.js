@@ -66,7 +66,6 @@ export default function TipPage({ user, stats }) {
                         mt={2}
                         sx={{
                           cursor: "pointer",
-                          color: user.color,
                           ":hover": { color: "secondary" },
                         }}
                       >
