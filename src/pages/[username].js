@@ -66,7 +66,9 @@ export default function TipPage({ user, tipPage }) {
                 </Link>
               </Flex>
             </Flex>
-            {user.isLoggedIn && tipPage.username === user.username && !view ? (
+            {user.isLoggedIn &&
+            tipPage.username.toUpperCase() === user.username.toUpperCase() &&
+            !view ? (
               <Edit user={user} />
             ) : (
               <>
@@ -104,6 +106,7 @@ export async function getServerSideProps(context) {
       try {
         const { access_token, ...userFromAuthToken } =
           await getUserFromAuthToken(auth_token);
+
         user = userFromAuthToken;
       } catch (e) {
         const tipPageUser = await getUser(username);
@@ -138,7 +141,9 @@ export async function getServerSideProps(context) {
 
       const { username: usernameFromAuthToken } =
         getDataFromAuthToken(auth_token);
-      const isOwnPage = usernameFromAuthToken === username;
+      const isOwnPage =
+        usernameFromAuthToken === username ||
+        usernameFromAuthToken.toUpperCase() === username.toUpperCase();
 
       if (isOwnPage) {
         return {
@@ -161,7 +166,11 @@ export async function getServerSideProps(context) {
         const { access_token, ...tipPage } = tipPageUser;
         return {
           props: {
-            user: { ...user, isLoggedIn: true },
+            user: {
+              ...user,
+              username: usernameFromAuthToken,
+              isLoggedIn: true,
+            },
             tipPage: { ...tipPage, username },
           },
         };

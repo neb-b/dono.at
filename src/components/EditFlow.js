@@ -30,7 +30,7 @@ export default function EditFlow({ user }) {
       setStrikeUsername(strike_username);
     }
 
-    setProfileColor(color || color.primary);
+    setProfileColor(color || colors.primary);
   }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
 
   const handleCopy = () => {
