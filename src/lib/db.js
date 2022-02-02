@@ -1,6 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
-import db from "./firebase-admin";
+import mime from "mime-types";
+
+import db from "./firebase";
+import { uploadFile } from "./s3";
 
 const verifyAuthToken = (authToken, accessToken) => {
   if (!authToken) {
@@ -240,6 +243,21 @@ export async function getStats() {
       resolve(data);
     } catch (error) {
       reject(error);
+    }
+  });
+}
+
+export async function uploadCoverPhoto(image) {
+  return new Promise(async (resolve, reject) => {
+    const name = uuidv4();
+
+    const extension = mime.extension(image.mimetype);
+
+    try {
+      const url = await uploadFile(`${name}.${extension}`, image);
+      resolve(url);
+    } catch (err) {
+      reject(err);
     }
   });
 }

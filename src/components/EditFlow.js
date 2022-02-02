@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-
+import { useDropzone } from "react-dropzone";
+import styled from "styled-components";
 import Checkmark from "components/CheckIcon";
 import Copy from "components/CopyIcon";
 import { Label, Input } from "@rebass/forms/styled-components";
@@ -9,6 +10,77 @@ import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 import { getButtonTextColorFromBg } from "util/color";
 import { UserContext } from "pages/_app";
 import { colors } from "styles/theme";
+
+const getColor = (props) => {
+  if (props.isDragAccept) {
+    return "#00e676";
+  }
+  if (props.isDragReject) {
+    return "#ff1744";
+  }
+  if (props.isFocused) {
+    return "#2196f3";
+  }
+  return "#eeeeee";
+};
+
+const Container = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-width: 2px;
+  border-radius: 10px;
+  margin-top: 4px;
+  border-color: ${(props) => getColor(props)};
+  border-style: dashed;
+  background-color: black;
+  color: #bdbdbd;
+  outline: none;
+  transition: border 0.24s ease-in-out;
+`;
+
+function StyledDropzone(props) {
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({ accept: "image/jpeg, image/png" });
+  const image = acceptedFiles[0];
+
+  React.useEffect(() => {
+    if (image) {
+      console.log("acceptedFiles", image);
+
+      const formData = new FormData();
+      formData.append("image", image);
+      axios.post("api/photo", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    }
+  }, [image]);
+
+  return (
+    <div className="container">
+      <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
+        <input {...getInputProps()} />
+        <p>Drag 'n' drop some files here, or click to select files</p>
+      </Container>
+
+      {image && (
+        <Box>
+          {image.path} - {image.size} bytes
+        </Box>
+      )}
+    </div>
+  );
+}
 
 export default function EditFlow({ user }) {
   const router = useRouter();
@@ -69,6 +141,10 @@ export default function EditFlow({ user }) {
   return (
     <Box pb={5} maxWidth={500} mx="auto">
       <Box maxWidth={["100%", 400]}>
+        <Box mt={4}>
+          <Label htmlFor="profile_color">Background Photo</Label>
+          <StyledDropzone />
+        </Box>
         <Box>
           <Label htmlFor="dono_link">Your Dono Link</Label>
           <Flex>

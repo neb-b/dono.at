@@ -190,6 +190,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
+    console.log("error", error);
     if (error === "user_not_found") {
       return { notFound: true };
     }
