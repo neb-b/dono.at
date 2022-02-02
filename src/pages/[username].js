@@ -7,8 +7,16 @@ import { Text, Box, Flex } from "rebass/styled-components";
 import * as cookie from "cookie";
 import Image from "next/image";
 import Layout from "components/Layout";
+import styled from "styled-components";
 
 import { getUserFromAuthToken, getDataFromAuthToken, getUser } from "../lib/db";
+
+const StyledImage = styled(Image)`
+  border-radius: 10px;
+  z-index: 0;
+  object-fit: cover;
+  box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.5);
+`;
 
 export default function TipPage({ user, tipPage }) {
   const {
@@ -27,10 +35,36 @@ export default function TipPage({ user, tipPage }) {
 
   return (
     <Layout color={tipPage?.color} user={user}>
-      <Box sx={{ mx: "auto", maxWidth: "500px", pb: 4 }} mt={[5, 5]}>
+      <Box
+        sx={{
+          // mx: "auto",
+          maxWidth: "500px",
+          pb: 4,
+        }}
+        mt={[5, 4]}
+      >
         {tipPage && (
           <>
-            <Flex mb={4} alignItems="center">
+            {tipPage.cover_photo && (
+              <Box width={1} height="100px" sx={{ zIndex: -1 }}>
+                <StyledImage
+                  src={tipPage.cover_photo}
+                  width="500px"
+                  height="200px"
+                  alt=""
+                />
+              </Box>
+            )}
+            <Flex
+              mb={4}
+              alignItems="center"
+              sx={{
+                mx: "auto",
+                zIndex: 2,
+                position: "relative",
+                mt: tipPage.cover_photo ? [3, 4] : 0,
+              }}
+            >
               <Box
                 sx={{
                   img: {
@@ -45,7 +79,7 @@ export default function TipPage({ user, tipPage }) {
                   src={tipPage.thumbnail}
                 />
               </Box>
-              <Flex ml={[3]} flexDirection="column" justifyContent="center">
+              <Flex ml={[3]} flexDirection="column">
                 <Text mt={-2} fontSize={[24, 32]}>
                   {tipPage.username}
                 </Text>

@@ -10,6 +10,7 @@ import { Button, Text, Box, Link, Flex } from "rebass/styled-components";
 import { getButtonTextColorFromBg } from "util/color";
 import { UserContext } from "pages/_app";
 import { colors } from "styles/theme";
+import Image from "next/image";
 
 const getColor = (props) => {
   if (props.isDragAccept) {
@@ -58,7 +59,7 @@ function StyledDropzone(props) {
 
       const formData = new FormData();
       formData.append("image", image);
-      axios.post("api/photo", formData, {
+      axios.post("api/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -141,10 +142,10 @@ export default function EditFlow({ user }) {
   return (
     <Box pb={5} maxWidth={500} mx="auto">
       <Box maxWidth={["100%", 400]}>
-        <Box mt={4}>
+        {/* <Box mt={4}>
           <Label htmlFor="profile_color">Background Photo</Label>
           <StyledDropzone />
-        </Box>
+        </Box> */}
         <Box>
           <Label htmlFor="dono_link">Your Dono Link</Label>
           <Flex>

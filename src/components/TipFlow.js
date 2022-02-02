@@ -224,6 +224,7 @@ export default function Tip({ username, tip_min, color, user }) {
             <>
               <Box
                 maxWidth={["100%", 400]}
+                mx="auto"
                 as="form"
                 onSubmit={(e) => {
                   e.preventDefault();

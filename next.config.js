@@ -5,6 +5,7 @@ module.exports = {
       "static-cdn.jtvnw.net",
       "yt3.ggpht.com",
       "platform-lookaside.fbsbx.com",
+      "s3.us-east-2.amazonaws.com",
     ],
   },
   publicRuntimeConfig: {
