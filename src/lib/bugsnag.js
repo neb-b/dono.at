@@ -7,6 +7,7 @@ const { publicRuntimeConfig } = getConfig();
 Bugsnag.start({
   apiKey: publicRuntimeConfig.BUGSNAG_API_KEY,
   plugins: [new BugsnagPluginReact(React)],
+  enabledReleaseStages: ["production"],
 });
 
 export default Bugsnag;
