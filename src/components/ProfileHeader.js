@@ -133,7 +133,7 @@ const EditButton = ({ imageExists }) => {
 export default function ProfileHeader(props) {
   const { contextUser, setContextUser } = React.useContext(UserContext);
   const { tipPage, user, editing, view } = props;
-  const coverPhoto = contextUser?.cover_url || user.cover_url;
+  const coverPhoto = contextUser?.cover_url || tipPage.cover_url;
 
   let profileLink;
   if (tipPage) {
