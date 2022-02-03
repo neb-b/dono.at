@@ -117,7 +117,7 @@ export async function getServerSideProps(context) {
   try {
     const user = await getUserFromAuthToken(auth_token);
 
-    const approvedProfiles = ["cheese__omelette", "bobscully"];
+    const approvedProfiles = ["cheese__omelette", "nebb_bb", "bobscully"];
     if (!user || !approvedProfiles.includes(user.username)) {
       return { props: {} };
     }
