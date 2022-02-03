@@ -9,6 +9,18 @@ import { getButtonTextColorFromBg } from "util/color";
 import { UserContext } from "pages/_app";
 import { colors } from "styles/theme";
 
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
+
 export default function EditFlow({ user, setView }) {
   const router = useRouter();
   const copyRef = React.createRef();
@@ -19,6 +31,9 @@ export default function EditFlow({ user, setView }) {
   const [success, setSuccess] = React.useState(false);
   const [showCheckMark, setShowCheckMark] = React.useState(false);
   const [hasUpdatedInfo, setHasUpdatedInfo] = React.useState(false);
+  const [hasUpdatedCoverPhoto, setHasUpdatedCoverPhoto] = React.useState(false);
+  const coverPhoto = contextUser?.cover_url;
+  const previousCoverPhoto = usePrevious(coverPhoto);
   const donoLink = `https://dono.at/${user.username}`;
 
   const apiUserDataStr = JSON.stringify(user);
@@ -31,6 +46,12 @@ export default function EditFlow({ user, setView }) {
 
     setProfileColor(color || colors.primary);
   }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
+
+  React.useEffect(() => {
+    if (coverPhoto && coverPhoto !== previousCoverPhoto) {
+      setHasUpdatedCoverPhoto(true);
+    }
+  }, [coverPhoto, setHasUpdatedCoverPhoto, previousCoverPhoto]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(donoLink);
@@ -208,7 +229,7 @@ export default function EditFlow({ user, setView }) {
               ml={["0", "auto"]}
               mt={[3, 0]}
               onClick={() => {
-                if (!hasUpdatedInfo) {
+                if (!hasUpdatedInfo && !hasUpdatedCoverPhoto) {
                   setContextUser(user);
                 }
 

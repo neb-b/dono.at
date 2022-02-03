@@ -17,7 +17,7 @@ export default function TipPage({ user, tipPage }) {
     view !== "tip";
 
   return (
-    <Layout color={tipPage?.color} user={user}>
+    <Layout color={tipPage?.color} user={user} disableLogin={editing}>
       <Box
         sx={{
           mx: [undefined, "auto"],
