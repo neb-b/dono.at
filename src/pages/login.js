@@ -14,6 +14,7 @@ export default function Login({ user }) {
         <Flex
           alignItems="center"
           flexDirection={["column", "column", "column"]}
+          px={[4, 0]}
         >
           <Text fontSize={[32]} lineHeight={1.1} fontWeight="bold">
             Login

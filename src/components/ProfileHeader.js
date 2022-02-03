@@ -222,7 +222,6 @@ export default function ProfileHeader(props) {
         alignItems="center"
         mt={coverPhoto || editing ? [-2, "-77px"] : 5}
         sx={{
-          pointerEvents: "none",
           width: ["100%", 400],
           mx: [undefined, "auto"],
           zIndex: 4,

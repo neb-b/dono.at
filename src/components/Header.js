@@ -62,14 +62,17 @@ export default function Header({ user, color, disableLogin }) {
           </Button>
         </Link>
       )}
-      {user && router.query.username !== user.username && user.isLoggedIn && (
-        <Link href={`/${user.username}`}>
-          <Button variant="link" mt={2}>
-            <Text display={["none", "block"]}>{user.username}</Text>
-            <Text display={["block", "none"]}>Profile</Text>
-          </Button>
-        </Link>
-      )}
+      {!disableLogin &&
+        user &&
+        router.query.username !== user.username &&
+        user.isLoggedIn && (
+          <Link href={`/${user.username}`}>
+            <Button variant="link" mt={2}>
+              <Text display={["none", "block"]}>{user.username}</Text>
+              <Text display={["block", "none"]}>Profile</Text>
+            </Button>
+          </Link>
+        )}
     </Flex>
   );
 }

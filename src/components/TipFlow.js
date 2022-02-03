@@ -132,7 +132,7 @@ export default function Tip({ username, tip_min, color, user, setView }) {
         mx: "auto",
         maxWidth: invoiceData ? ["500px"] : ["500px"],
         pb: 4,
-        px: [3, 0],
+        px: [4, 0],
       }}
     >
       {paid && (
