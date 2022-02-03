@@ -80,7 +80,7 @@ function StyledDropzone({ username, children, setContextUser }) {
         left: 0,
         right: 0,
         bottom: 0,
-        cursor: "pointer",
+        cursor: ["default", "pointer"],
         width: ["100%", "505px"],
         height: "205px",
 
@@ -106,11 +106,10 @@ const EditButton = ({ imageExists }) => {
   return (
     <Box sx={{ position: "relative", top: 0 }}>
       <Button
+        diabled
         className="edit-button"
         sx={{
           position: "absolute",
-          top: 0,
-          zIndex: 5,
           color: "white",
           bg: "transparent",
           right: 0,
@@ -223,6 +222,7 @@ export default function ProfileHeader(props) {
         alignItems="center"
         mt={coverPhoto || editing ? [-2, "-77px"] : 5}
         sx={{
+          pointerEvents: "none",
           width: ["100%", 400],
           mx: [undefined, "auto"],
           zIndex: 4,

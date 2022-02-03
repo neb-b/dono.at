@@ -16,7 +16,7 @@ export default function Header({ user, color, disableLogin }) {
       px={4}
       mb={4}
       minHeight={[70, 80]}
-      sx={{ zIndex: 4, position: "relative" }}
+      sx={{ zIndex: 4, position: "relative", pointerEvents: "none" }}
     >
       <Link href="/" style={{ textDecoration: "none" }}>
         <Text
