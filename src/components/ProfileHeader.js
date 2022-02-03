@@ -1,40 +1,124 @@
+import axios from "axios";
 import React from "react";
 import Link from "next/link";
 import { Button, Text, Box, Flex, Image } from "rebass/styled-components";
 import EditIcon from "components/EditIcon";
+import { useDropzone } from "react-dropzone";
+import { UserContext } from "pages/_app";
 
-const EditButton = ({ imageExists }) => {
+const getColor = (props) => {
+  if (props.isDragAccept) {
+    return "#00e676";
+  }
+  if (props.isDragReject) {
+    return "#ff1744";
+  }
+  if (props.isFocused) {
+    return "#fdaa26";
+  }
+  return "#eee";
+};
+
+function StyledDropzone({ username, children, setContextUser }) {
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+    ...rest
+  } = useDropzone({ accept: "image/jpeg, image/png" });
+  const image = acceptedFiles[0];
+
+  React.useEffect(() => {
+    if (image) {
+      const formData = new FormData();
+      formData.append("image", image);
+      axios
+        .post("api/image", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(({ data }) => {
+          setContextUser(data.user);
+        });
+    }
+  }, [image, username, setContextUser]);
+
   return (
-    <Button
+    <Box
+      {...getRootProps({ isFocused, isDragAccept, isDragReject })}
       sx={{
+        borderRadius: [0, "20px"],
+        border: [
+          "none",
+          `2px dashed ${getColor({
+            isDragAccept,
+            isDragReject,
+            isFocused,
+            rest,
+          })}`,
+        ],
+        backgroundColor: "transparent",
         position: "absolute",
         top: 0,
-        zIndex: 5,
-        color: "white",
-        bg: "transparent",
+        left: 0,
         right: 0,
-        display: "flex",
-        alignItems: "center",
-        mt: ["10px", 0],
+        bottom: 0,
+        cursor: "pointer",
+        width: ["100%", "505px"],
+        height: "205px",
 
-        ":hover": {
-          bg: "transparent",
-          "*": {
-            color: "primary",
-            fill: "primary",
-            stroke: "primary",
-          },
+        ":hover .edit-button *": {
+          color: "primary",
+          fill: "primary",
+          stroke: "primary",
         },
       }}
     >
-      <EditIcon />
-      <Text ml={2}>{imageExists ? "Edit" : "Add"} Picture</Text>
-    </Button>
+      {children}
+      <input {...getInputProps()} />
+    </Box>
+  );
+}
+
+const EditButton = ({ imageExists }) => {
+  return (
+    <Box sx={{ position: "relative", top: 0 }}>
+      <Button
+        className="edit-button"
+        sx={{
+          position: "absolute",
+          top: 0,
+          zIndex: 5,
+          color: "white",
+          bg: "transparent",
+          right: 0,
+          display: "flex",
+          alignItems: "center",
+          mt: ["10px", 0],
+          zIndex: 6,
+
+          ":hover": {
+            background: "transparent",
+          },
+        }}
+      >
+        <EditIcon />
+        <Text ml={2}>{imageExists ? "Edit" : "Add"} Picture</Text>
+      </Button>
+    </Box>
   );
 };
 
 export default function ProfileHeader(props) {
-  const { tipPage, user, editing } = props;
+  const { contextUser, setContextUser } = React.useContext(UserContext);
+  const { tipPage, user, editing, view } = props;
+  const coverPhoto = contextUser?.cover_url || user.cover_url;
+  // console.log("contextUser", contextUser);
+
   let profileLink;
   if (tipPage) {
     if (tipPage.primary === "twitch") {
@@ -46,9 +130,14 @@ export default function ProfileHeader(props) {
     }
   }
 
+  const Wrapper =
+    editing && view !== "tip"
+      ? (props) => <StyledDropzone {...props} setContextUser={setContextUser} />
+      : Box;
+
   return (
     <>
-      {(tipPage.cover_photo || editing) && (
+      {(coverPhoto || editing) && (
         <Box
           height="210px"
           sx={{
@@ -58,69 +147,71 @@ export default function ProfileHeader(props) {
             width: ["100%", "500px"],
           }}
         >
-          {editing && <EditButton imageExists={tipPage.cover_photo} />}
-          {editing && !tipPage.cover_photo && (
-            <Box
-              width="500px"
-              height="200px"
-              sx={{
-                borderRadius: [0, 10, 10],
-                border: ["none", "1px dashed white"],
-                background: `repeating-linear-gradient(
+          <Wrapper username={tipPage.username}>
+            {editing && <EditButton imageExists={coverPhoto} />}
+            {editing && !coverPhoto && (
+              <Box
+                width={["100%", "500px"]}
+                height="200px"
+                sx={{
+                  borderRadius: [0, 20, 20],
+                  background: `repeating-linear-gradient(
                       45deg,
                       black,
                       black 10px,
-                      #111 10px,
-                      #111 20px
+                      #222 10px,
+                      #222 20px
                     )`,
-              }}
-            />
-          )}
+                }}
+              />
+            )}
 
-          {tipPage.cover_photo && (
-            <>
-              <Image
-                src={tipPage.cover_photo}
-                width="500px"
-                height="200px"
-                alt=""
-                sx={{
-                  borderRadius: [0, 20, 20],
-                  zIndex: 0,
-                  objectFit: "cover",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                }}
-              />
-              <Box
-                sx={{
-                  zIndex: 4,
-                  position: "relative",
-                  padding: "10px",
-                  height: "200px",
-                  width: "500px",
-                  boxShadow: "0 0 90px 60px black inset",
-                }}
-              />
-            </>
-          )}
+            {coverPhoto && (
+              <>
+                <Image
+                  src={coverPhoto}
+                  width={["100%", "500px"]}
+                  height="200px"
+                  alt=""
+                  sx={{
+                    borderRadius: [0, "20px", "20px"],
+                    zIndex: 0,
+                    objectFit: "cover",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                  }}
+                />
+                <Box
+                  sx={{
+                    zIndex: 4,
+                    position: "relative",
+                    padding: "10px",
+                    height: "200px",
+                    borderRadius: [0, "20px", "20px"],
+                    width: ["auto", "500px"],
+                    boxShadow: "0 0 90px 60px black inset",
+                  }}
+                />
+              </>
+            )}
+          </Wrapper>
         </Box>
       )}
 
       <Flex
         mb={4}
         alignItems="center"
-        mt={[-2, "-77px"]}
+        mt={coverPhoto || editing ? [-2, "-77px"] : 5}
         sx={{
-          width: 400,
-          mx: "auto",
+          width: ["100%", 400],
+          mx: [undefined, "auto"],
           zIndex: 4,
           position: "relative",
-          mt: tipPage.cover_photo ? [3, 4] : 0,
-          px: [4, 0],
+          mt: coverPhoto ? [3, 4] : 0,
+          pl: [4, 0],
         }}
       >
         <Box

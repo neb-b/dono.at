@@ -10,7 +10,7 @@ import { getButtonTextColorFromBg } from "util/color";
 
 const QRCode = dynamic(() => import("./QR"), { ssr: false });
 
-export default function Tip({ username, tip_min, color, user }) {
+export default function Tip({ username, tip_min, color, user, setView }) {
   const router = useRouter();
   const [amount, setAmount] = React.useState(tip_min);
   const [tipAmountError, setTipAmountError] = React.useState(false);
@@ -318,9 +318,10 @@ export default function Tip({ username, tip_min, color, user }) {
                         variant="outline"
                         button="button"
                         onClick={() =>
-                          router.push({
-                            pathname: router.query.username,
-                          })
+                          // router.push({
+                          //   pathname: router.query.username,
+                          // })
+                          setView("edit")
                         }
                       >
                         Edit Profile

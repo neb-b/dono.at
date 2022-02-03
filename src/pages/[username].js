@@ -1,8 +1,7 @@
 import React from "react";
-import { useRouter } from "next/router";
 import Tip from "components/TipFlow";
 import Edit from "components/EditFlow";
-import { Text, Box, Flex } from "rebass/styled-components";
+import { Text, Box } from "rebass/styled-components";
 import * as cookie from "cookie";
 import Layout from "components/Layout";
 import ProfileHeader from "components/ProfileHeader";
@@ -10,36 +9,44 @@ import ProfileHeader from "components/ProfileHeader";
 import { getUserFromAuthToken, getDataFromAuthToken, getUser } from "../lib/db";
 
 export default function TipPage({ user, tipPage }) {
-  const {
-    query: { view },
-  } = useRouter();
+  const [view, setView] = React.useState("edit");
   const editing =
     user &&
     user.isLoggedIn &&
     tipPage.username.toUpperCase() === user.username.toUpperCase() &&
-    !view;
+    view !== "tip";
 
   return (
     <Layout color={tipPage?.color} user={user}>
       <Box
         sx={{
-          mx: "auto",
+          mx: [undefined, "auto"],
           maxWidth: "500px",
           pb: 4,
         }}
         mt={[5, 4]}
       >
         {tipPage && (
-          <Box>
-            <ProfileHeader tipPage={tipPage} user={user} editing={editing} />
+          <Box sx={{}}>
+            <ProfileHeader
+              tipPage={tipPage}
+              view={view}
+              user={user}
+              editing={editing}
+            />
 
-            <Box mx="auto" width={["100%", 400]}>
+            <Box
+              width={["100%", 400]}
+              sx={{
+                mx: "auto",
+              }}
+            >
               {editing ? (
-                <Edit user={user} />
+                <Edit user={user} setView={setView} />
               ) : (
                 <>
                   {tipPage.strike_username ? (
-                    <Tip user={user} {...tipPage} />
+                    <Tip user={user} setView={setView} {...tipPage} />
                   ) : (
                     <Text ml={4} mt={4} fontWeight="normal">
                       This user hasn&apos;t enabled tips yet.
