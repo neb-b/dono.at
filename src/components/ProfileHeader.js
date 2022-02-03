@@ -20,6 +20,7 @@ const getColor = (props) => {
 };
 
 function StyledDropzone({ username, children, setContextUser }) {
+  const [error, setError] = React.useState();
   const {
     acceptedFiles,
     getRootProps,
@@ -28,7 +29,19 @@ function StyledDropzone({ username, children, setContextUser }) {
     isDragAccept,
     isDragReject,
     ...rest
-  } = useDropzone({ accept: "image/jpeg, image/png" });
+  } = useDropzone({
+    accept: "image/jpeg, image/png",
+    validator: (file) => {
+      if (file.size > 5242880) {
+        setError("File is too big");
+
+        setTimeout(() => {
+          setError(null);
+        }, 5000);
+      }
+    },
+  });
+
   const image = acceptedFiles[0];
 
   React.useEffect(() => {
@@ -79,6 +92,11 @@ function StyledDropzone({ username, children, setContextUser }) {
       }}
     >
       {children}
+      {error && (
+        <Text mt={[0, 2]} ml={[4, 0]} color="red">
+          {error}
+        </Text>
+      )}
       <input {...getInputProps()} />
     </Box>
   );
@@ -117,7 +135,6 @@ export default function ProfileHeader(props) {
   const { contextUser, setContextUser } = React.useContext(UserContext);
   const { tipPage, user, editing, view } = props;
   const coverPhoto = contextUser?.cover_url || user.cover_url;
-  // console.log("contextUser", contextUser);
 
   let profileLink;
   if (tipPage) {

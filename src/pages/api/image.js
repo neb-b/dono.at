@@ -1,5 +1,7 @@
 import * as cookie from "cookie";
 import multiparty from "multiparty";
+import { v4 as uuidv4 } from "uuid";
+import mime from "mime-types";
 import { getDataFromAuthToken, updateUserData } from "../../lib/db";
 import { s3Client, bucket } from "../../lib/s3";
 
@@ -21,6 +23,14 @@ async function handler(req, res) {
 
     form.on("part", (part) => {
       if (part.name === "image") {
+        const extension = mime.extension(part.headers["content-type"]);
+        const name = `${uuidv4()}.${extension}`;
+        part.filename = name;
+
+        if (part.byteCount > 5242880) {
+          throw Error("File too large");
+        }
+
         s3Client.putObject(
           {
             Bucket: bucket,
