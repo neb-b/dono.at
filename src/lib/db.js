@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
-import db from "./firebase-admin";
+import db from "./firebase";
 
 const verifyAuthToken = (authToken, accessToken) => {
   if (!authToken) {
@@ -81,7 +81,7 @@ export async function createOrUpdateUser({
 export async function updateUserData(
   username,
   authToken,
-  { strikeUsername, tipAmount, profileColor }
+  { strikeUsername, tipAmount, profileColor, coverUrl }
 ) {
   return new Promise(async (resolve, reject) => {
     const userRef = db.ref(`users/${username}`);
@@ -97,16 +97,16 @@ export async function updateUserData(
       const { access_token, strike_username, ...user } = dbUser;
 
       const isLoggedIn = verifyAuthToken(authToken, access_token);
-
       if (!isLoggedIn) {
         reject("User not authorized");
       }
 
       const newUser = {
         ...dbUser,
-        tip_min: tipAmount,
-        strike_username: strikeUsername,
-        color: profileColor,
+        ...(tipAmount ? { tip_min: tipAmount } : {}),
+        ...(strikeUsername ? { strike_username: strikeUsername } : {}),
+        ...(profileColor ? { color: profileColor } : {}),
+        ...(coverUrl ? { cover_url: coverUrl } : {}),
       };
 
       await userRef.set(newUser, (err) => {

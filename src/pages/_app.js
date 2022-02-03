@@ -49,13 +49,13 @@ function MyApp({ Component, pageProps }) {
               strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${gtag.GA_TRACKING_ID}', {
-              page_path: window.location.pathname,
-            });
-          `,
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gtag.GA_TRACKING_ID}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
               }}
             />
           </>
@@ -64,9 +64,7 @@ function MyApp({ Component, pageProps }) {
 
         <ThemeProvider theme={theme}>
           <Flex flexDirection="column" minHeight="100vh">
-            <Box px={[4]}>
-              <Component {...pageProps} />
-            </Box>
+            <Component {...pageProps} />
             <Footer />
           </Flex>
         </ThemeProvider>

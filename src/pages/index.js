@@ -13,12 +13,12 @@ export default function Home({ user }) {
           alignItems="center"
           flexDirection={["column", "column", "column"]}
         >
-          <Box>
+          <Box px={[4, 4, 0]}>
             <Text fontSize={[48, 64]} lineHeight={1.1} fontWeight="bold">
               Lightning Fast Livestream Donations
             </Text>
 
-            <Link href="/cheese__omelette" passHref>
+            <Link href="/nebb_bb" passHref>
               <Button variant="primary" mt={4}>
                 <Text display={["none", "block"]}>
                   View Example Donation Page
@@ -36,7 +36,7 @@ export default function Home({ user }) {
             <Box
               mt={[4, 4, 5]}
               border="1px solid red"
-              pl={2}
+              pl={[0, 2]}
               flexBasis={"50%"}
               flexGrow={0}
             >
@@ -51,7 +51,7 @@ export default function Home({ user }) {
                 <source src="/assets/donation.mp4#t=0.1" type="video/mp4" />
               </Box>
             </Box>
-            <Box flexBasis={"45%"} flexGrow={0} ml={3} mt={[5, 4]}>
+            <Box flexBasis={"45%"} flexGrow={0} px={[4, 4, 0]} mt={[5, 4]}>
               <Text fontSize={32} fontWeight="bold" color="secondary">
                 <Text display="inline-block" color="secondary">
                   Instant

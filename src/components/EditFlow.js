@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-
 import Checkmark from "components/CheckIcon";
 import Copy from "components/CopyIcon";
 import { Label, Input } from "@rebass/forms/styled-components";
@@ -10,7 +9,19 @@ import { getButtonTextColorFromBg } from "util/color";
 import { UserContext } from "pages/_app";
 import { colors } from "styles/theme";
 
-export default function EditFlow({ user }) {
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef();
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
+
+export default function EditFlow({ user, setView }) {
   const router = useRouter();
   const copyRef = React.createRef();
   const { contextUser, setContextUser } = React.useContext(UserContext);
@@ -20,6 +31,9 @@ export default function EditFlow({ user }) {
   const [success, setSuccess] = React.useState(false);
   const [showCheckMark, setShowCheckMark] = React.useState(false);
   const [hasUpdatedInfo, setHasUpdatedInfo] = React.useState(false);
+  const [hasUpdatedCoverPhoto, setHasUpdatedCoverPhoto] = React.useState(false);
+  const coverPhoto = contextUser?.cover_url;
+  const previousCoverPhoto = usePrevious(coverPhoto);
   const donoLink = `https://dono.at/${user.username}`;
 
   const apiUserDataStr = JSON.stringify(user);
@@ -32,6 +46,12 @@ export default function EditFlow({ user }) {
 
     setProfileColor(color || colors.primary);
   }, [setTipAmount, setStrikeUsername, apiUserDataStr]);
+
+  React.useEffect(() => {
+    if (coverPhoto && coverPhoto !== previousCoverPhoto) {
+      setHasUpdatedCoverPhoto(true);
+    }
+  }, [coverPhoto, setHasUpdatedCoverPhoto, previousCoverPhoto]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(donoLink);
@@ -67,8 +87,8 @@ export default function EditFlow({ user }) {
   }
 
   return (
-    <Box pb={5} maxWidth={500} mx="auto">
-      <Box maxWidth={["100%", 400]}>
+    <Box pb={5} px={[4, 0]} pt={[2, 3]} width={["100%", 400]} mx="auto">
+      <Box>
         <Box>
           <Label htmlFor="dono_link">Your Dono Link</Label>
           <Flex>
@@ -95,7 +115,6 @@ export default function EditFlow({ user }) {
             />
             <Button
               ml={2}
-              px={"32px"}
               variant="secondary"
               onClick={handleCopy}
               sx={{
@@ -210,13 +229,15 @@ export default function EditFlow({ user }) {
               ml={["0", "auto"]}
               mt={[3, 0]}
               onClick={() => {
-                if (!hasUpdatedInfo) {
+                if (!hasUpdatedInfo && !hasUpdatedCoverPhoto) {
                   setContextUser(user);
                 }
-                router.push({
-                  pathname: router.query.username,
-                  query: { view: "tip" },
-                });
+
+                setView("tip");
+                // router.push({
+                //   pathname: router.query.username,
+                //   query: { view: "tip" },
+                // });
               }}
             >
               View as Guest

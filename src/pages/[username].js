@@ -1,87 +1,61 @@
 import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import Tip from "components/TipFlow";
 import Edit from "components/EditFlow";
-import { Text, Box, Flex } from "rebass/styled-components";
+import { Text, Box } from "rebass/styled-components";
 import * as cookie from "cookie";
-import Image from "next/image";
 import Layout from "components/Layout";
+import ProfileHeader from "components/ProfileHeader";
 
 import { getUserFromAuthToken, getDataFromAuthToken, getUser } from "../lib/db";
 
 export default function TipPage({ user, tipPage }) {
-  const {
-    query: { view },
-  } = useRouter();
-  let profileLink;
-  if (tipPage) {
-    if (tipPage.primary === "twitch") {
-      profileLink = `twitch.tv/${tipPage.username}`;
-    } else if (tipPage.primary === "facebook") {
-      profileLink = `facebook.com/${tipPage.username}`;
-    } else {
-      profileLink = `youtube.com/channel/${tipPage.youtube_id}`;
-    }
-  }
+  const [view, setView] = React.useState("edit");
+  const editing =
+    user &&
+    user.isLoggedIn &&
+    tipPage.username.toUpperCase() === user.username.toUpperCase() &&
+    view !== "tip";
 
   return (
-    <Layout color={tipPage?.color} user={user}>
-      <Box sx={{ mx: "auto", maxWidth: "500px", pb: 4 }} mt={[5, 5]}>
+    <Layout color={tipPage?.color} user={user} disableLogin={editing}>
+      <Box
+        sx={{
+          mx: [undefined, "auto"],
+          maxWidth: "500px",
+          pb: 4,
+        }}
+        mt={[5, 4]}
+      >
         {tipPage && (
-          <>
-            <Flex mb={4} alignItems="center">
-              <Box
-                sx={{
-                  img: {
-                    borderRadius: 10,
-                  },
-                }}
-              >
-                <Image
-                  alt="Profile picture"
-                  height={50}
-                  width={50}
-                  src={tipPage.thumbnail}
-                />
-              </Box>
-              <Flex ml={[3]} flexDirection="column" justifyContent="center">
-                <Text mt={-2} fontSize={[24, 32]}>
-                  {tipPage.username}
-                </Text>
-                <Link href={`https://${profileLink}`}>
-                  <a
-                    style={{
-                      textDecoration: "none",
-                    }}
-                  >
-                    <Text
-                      fontSize={12}
-                      color="gray"
-                      sx={{ ":hover": { color: user.color || "api" } }}
-                    >
-                      {profileLink}
+          <Box sx={{}}>
+            <ProfileHeader
+              tipPage={tipPage}
+              view={view}
+              user={user}
+              editing={editing}
+            />
+
+            <Box
+              width={["100%", 400]}
+              sx={{
+                mx: "auto",
+              }}
+            >
+              {editing ? (
+                <Edit user={user} setView={setView} />
+              ) : (
+                <>
+                  {tipPage.strike_username ? (
+                    <Tip user={user} setView={setView} {...tipPage} />
+                  ) : (
+                    <Text ml={4} mt={4} fontWeight="normal">
+                      This user hasn&apos;t enabled tips yet.
                     </Text>
-                  </a>
-                </Link>
-              </Flex>
-            </Flex>
-            {user.isLoggedIn &&
-            tipPage.username.toUpperCase() === user.username.toUpperCase() &&
-            !view ? (
-              <Edit user={user} />
-            ) : (
-              <>
-                {tipPage.strike_username ? (
-                  <Tip user={user} {...tipPage} />
-                ) : (
-                  <Text ml={4} mt={4} fontWeight="normal">
-                    This user hasn&apos;t enabled tips yet.
-                  </Text>
-                )}
-              </>
-            )}
-          </>
+                  )}
+                </>
+              )}
+            </Box>
+          </Box>
         )}
       </Box>
     </Layout>
@@ -190,6 +164,7 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
+    console.log("error", error);
     if (error === "user_not_found") {
       return { notFound: true };
     }
