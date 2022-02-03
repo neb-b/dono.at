@@ -158,7 +158,7 @@ export async function getUserFromAuthToken(authToken) {
       const dbUser = dbUserSnapShot.val();
 
       if (dbUser) {
-        resolve(dbUser);
+        resolve({ ...dbUser, username });
       } else {
         reject("user_not_found");
       }
