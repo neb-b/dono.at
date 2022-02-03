@@ -13,8 +13,10 @@ export default function Header({ user, color, disableLogin }) {
       alignItems="center"
       justifyContent="space-between"
       py={2}
+      px={4}
       mb={4}
-      minHeight={80}
+      minHeight={[70, 80]}
+      sx={{ zIndex: 4, position: "relative" }}
     >
       <Link href="/" style={{ textDecoration: "none" }}>
         <Text
@@ -53,7 +55,7 @@ export default function Header({ user, color, disableLogin }) {
           </Button>
         </Link>
       )}
-      {user && user.isLoggedIn && (
+      {user && user.isLoggedIn && router.pathname !== "/[username]" && (
         <Link href={`/${user.username}`}>
           <Button variant="link" mt={2}>
             <Text display={["none", "block"]}>{user.username}</Text>

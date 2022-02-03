@@ -140,12 +140,8 @@ export default function EditFlow({ user }) {
   }
 
   return (
-    <Box pb={5} maxWidth={500} mx="auto">
-      <Box maxWidth={["100%", 400]}>
-        {/* <Box mt={4}>
-          <Label htmlFor="profile_color">Background Photo</Label>
-          <StyledDropzone />
-        </Box> */}
+    <Box pb={5} px={[4, 0]} width={["100%", 400]} mx="auto">
+      <Box>
         <Box>
           <Label htmlFor="dono_link">Your Dono Link</Label>
           <Flex>
@@ -172,7 +168,6 @@ export default function EditFlow({ user }) {
             />
             <Button
               ml={2}
-              px={"32px"}
               variant="secondary"
               onClick={handleCopy}
               sx={{

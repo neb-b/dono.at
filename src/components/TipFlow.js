@@ -128,7 +128,12 @@ export default function Tip({ username, tip_min, color, user }) {
 
   return (
     <Box
-      sx={{ mx: "auto", maxWidth: invoiceData ? ["500px"] : ["500px"], pb: 4 }}
+      sx={{
+        mx: "auto",
+        maxWidth: invoiceData ? ["500px"] : ["500px"],
+        pb: 4,
+        px: [3, 0],
+      }}
     >
       {paid && (
         <Box>

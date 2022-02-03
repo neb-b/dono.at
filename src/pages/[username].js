@@ -13,6 +13,11 @@ export default function TipPage({ user, tipPage }) {
   const {
     query: { view },
   } = useRouter();
+  const editing =
+    user &&
+    user.isLoggedIn &&
+    tipPage.username.toUpperCase() === user.username.toUpperCase() &&
+    !view;
 
   return (
     <Layout color={tipPage?.color} user={user}>
@@ -26,12 +31,10 @@ export default function TipPage({ user, tipPage }) {
       >
         {tipPage && (
           <Box>
-            <ProfileHeader tipPage={tipPage} user={user} />
+            <ProfileHeader tipPage={tipPage} user={user} editing={editing} />
 
-            <Box mx="auto" width={[400]}>
-              {user.isLoggedIn &&
-              tipPage.username.toUpperCase() === user.username.toUpperCase() &&
-              !view ? (
+            <Box mx="auto" width={["100%", 400]}>
+              {editing ? (
                 <Edit user={user} />
               ) : (
                 <>
