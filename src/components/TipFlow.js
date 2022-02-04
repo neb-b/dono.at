@@ -236,7 +236,7 @@ export default function Tip({ username, tip_min, color, user, setView }) {
                 }}
               >
                 <Box>
-                  <Label htmlFor="donation_amount">
+                  <Label htmlFor="donation_amountxxx">
                     Amount (USD){" "}
                     {tipAmountError && (
                       <Text
@@ -255,27 +255,27 @@ export default function Tip({ username, tip_min, color, user, setView }) {
                     tx="forms.input"
                     variant="normal"
                     onChange={(e) => handleTipAmount(e.target.value)}
-                    name="donation_amount"
+                    name="donation_amountxxx"
                     placeholder="1.23"
                     autocomplete="off"
                     value={amount}
                   />
                 </Box>
                 <Box mt={3}>
-                  <Label htmlFor="donation_from">From</Label>
+                  <Label htmlFor="donation_fromxxx">From</Label>
                   <Input
                     disabled={loading}
                     tx="forms.input"
                     variant="normal"
                     onChange={(e) => setFrom(e.target.value)}
-                    name="donation_from"
+                    name="donation_fromxxx"
                     placeholder="satoshi"
                     autocomplete="off"
                     value={from}
                   />
                 </Box>
                 <Box mt={3}>
-                  <Label htmlFor="donation_message">
+                  <Label htmlFor="donation_messagexxx">
                     Message{" "}
                     {msgError && (
                       <Text color="red" fontWeight="normal" fontSize={2} ml={2}>
@@ -286,7 +286,7 @@ export default function Tip({ username, tip_min, color, user, setView }) {
                   <Textarea
                     disabled={loading}
                     onChange={(e) => handleMessage(e.target.value)}
-                    name="donation_message"
+                    name="donation_messagexxx"
                     placeholder="Hello"
                     autocomplete="off"
                     value={message}

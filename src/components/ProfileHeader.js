@@ -16,7 +16,7 @@ const getColor = (props) => {
   if (props.isFocused) {
     return "#fdaa26";
   }
-  return "#eee";
+  return "#333";
 };
 
 function StyledDropzone({ username, children, setContextUser }) {
@@ -208,7 +208,7 @@ export default function ProfileHeader(props) {
                     height: "200px",
                     borderRadius: [0, "20px", "20px"],
                     width: ["auto", "500px"],
-                    boxShadow: "0 0 90px 60px black inset",
+                    boxShadow: "0 0 90px 55px black inset",
                   }}
                 />
               </>
@@ -217,16 +217,16 @@ export default function ProfileHeader(props) {
         </Box>
       )}
 
-      <Flex
+      <Box
         mb={4}
+        display="flex"
         alignItems="center"
-        mt={coverPhoto || editing ? [-2, "-77px"] : 5}
         sx={{
           width: ["100%", 400],
           mx: [undefined, "auto"],
           zIndex: 4,
           position: "relative",
-          mt: coverPhoto ? [3, 4] : 0,
+          mt: coverPhoto || editing ? [-2, "-78px"] : 5,
           pl: [4, 0],
         }}
       >
@@ -257,14 +257,14 @@ export default function ProfileHeader(props) {
               <Text
                 fontSize={12}
                 color="gray"
-                sx={{ ":hover": { color: user.color || "api" } }}
+                sx={{ ":hover": { color: tipPage.color || "api" } }}
               >
                 {profileLink}
               </Text>
             </a>
           </Link>
         </Flex>
-      </Flex>
+      </Box>
     </>
   );
 }
