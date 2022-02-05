@@ -23,6 +23,7 @@ export default function Tip({ username, tip_min, color, user, setView }) {
   const [paid, setPaid] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const invoiceId = invoiceData?.invoiceId;
   const isExpired = expires <= 0;
   const userColor = color || "#fdaa26";
@@ -35,17 +36,23 @@ export default function Tip({ username, tip_min, color, user, setView }) {
     setLoading(true);
     setExpires(null);
     setExpirationTime(null);
+    setError(false);
 
-    const { data } = await axios.post("/api/invoice", {
-      username,
-      amount,
-      message,
-    });
+    try {
+      const { data } = await axios.post("/api/invoice", {
+        username,
+        amount,
+        message,
+      });
 
-    setExpires(data.expirationInSec);
-    setExpirationTime(data.expirationInSec);
-    setInvoiceData(data);
-    setLoading(false);
+      setExpires(data.expirationInSec);
+      setExpirationTime(data.expirationInSec);
+      setInvoiceData(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
   }
 
   const refreshInvoice = () => {
@@ -328,6 +335,17 @@ export default function Tip({ username, tip_min, color, user, setView }) {
                       </Button>
                     )}
                   </Flex>
+                  {error && (
+                    <Box
+                      mt={3}
+                      bg="red"
+                      px={3}
+                      py={3}
+                      sx={{ borderRadius: 10 }}
+                    >
+                      Error starting a donation.
+                    </Box>
+                  )}
                 </Box>
               </Box>
             </>
