@@ -143,8 +143,8 @@ export default function Tip({ username, tip_min, color, user, setView }) {
       }}
     >
       {paid && (
-        <Box>
-          <Text>Thank you for your tip!</Text>
+        <Box pt={[4]}>
+          <Text fontSize={[24]}>Thank you for your tip!</Text>
         </Box>
       )}
       {!paid && (
