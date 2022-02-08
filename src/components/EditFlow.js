@@ -22,7 +22,6 @@ function usePrevious(value) {
 }
 
 export default function EditFlow({ user, setView }) {
-  const router = useRouter();
   const copyRef = React.createRef();
   const { contextUser, setContextUser } = React.useContext(UserContext);
   const [strikeUsername, setStrikeUsername] = React.useState("");
@@ -32,6 +31,7 @@ export default function EditFlow({ user, setView }) {
   const [showCheckMark, setShowCheckMark] = React.useState(false);
   const [hasUpdatedInfo, setHasUpdatedInfo] = React.useState(false);
   const [hasUpdatedCoverPhoto, setHasUpdatedCoverPhoto] = React.useState(false);
+  const [userNotFound, setUserNotFound] = React.useState(false);
   const coverPhoto = contextUser?.cover_url;
   const previousCoverPhoto = usePrevious(coverPhoto);
   const donoLink = `https://dono.at/${user.username}`;
@@ -52,6 +52,27 @@ export default function EditFlow({ user, setView }) {
       setHasUpdatedCoverPhoto(true);
     }
   }, [coverPhoto, setHasUpdatedCoverPhoto, previousCoverPhoto]);
+
+  React.useEffect(() => {
+    async function fetchStrikeUser(username) {
+      const response = await axios.get(`/api/strike/${username}`);
+      return response.data;
+    }
+
+    if (strikeUsername) {
+      setUserNotFound(false);
+
+      fetchStrikeUser(strikeUsername)
+        .then((data) => {
+          if (data.not_found) {
+            setUserNotFound(true);
+          }
+        })
+        .catch((err) => {
+          console.log("erro", err);
+        });
+    }
+  }, [strikeUsername]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(donoLink);
@@ -159,6 +180,11 @@ export default function EditFlow({ user, setView }) {
               </Link>{" "}
               to download Strike and get started.
             </Text>
+          )}
+          {userNotFound && (
+            <Box color="red" mt={2}>
+              There is no Strike user with that username.
+            </Box>
           )}
         </Box>
         <Box mt={4}>

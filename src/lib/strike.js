@@ -38,6 +38,7 @@ export async function createInvoice({
     }
   });
 }
+
 export async function getInvoice(invoiceId) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -46,6 +47,21 @@ export async function getInvoice(invoiceId) {
       resolve(data);
     } catch (error) {
       logError(error);
+      reject(error);
+    }
+  });
+}
+
+export async function fetchUser({ username }) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await api.get(`/accounts/handle/${username}/profile`);
+
+      resolve(data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        resolve({ not_found: true });
+      }
       reject(error);
     }
   });
