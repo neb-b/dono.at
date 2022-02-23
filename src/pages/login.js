@@ -55,12 +55,15 @@ export default function Login({ user }) {
                 opacity: 0.3,
                 cursor: "default",
               }}
-              mt={2}
+              mt={4}
             >
               <Text>StreamElements</Text>
             </Button>
             <Text fontWeight="normal" mt={1} color="gray">
-              Coming soon
+              Coming soon...
+            </Text>
+            <Text fontSize={1} fontWeight="normal" mt={1} color="gray">
+              (@StreamElements please give me an API key)
             </Text>
           </Box>
         </Flex>
