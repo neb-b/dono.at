@@ -8,6 +8,7 @@ async function apiRouteHandler(req, res) {
   } = req;
 
   try {
+    console.log("start", Date.now());
     const { access_token } = await getUser(username);
 
     const { data } = await axios.post(
@@ -27,6 +28,8 @@ async function apiRouteHandler(req, res) {
         // special_text_color: "orange",
       }
     );
+
+    console.log("stop", Date.now());
 
     await logTx({ amount, username, from, message, date: Date.now() });
 
