@@ -1,14 +1,14 @@
-import React from "react";
+import React from "react"
 
-import * as cookie from "cookie";
-import Link from "next/link";
-import { Text, Box, Flex, Button } from "rebass/styled-components";
-import Layout from "components/Layout";
+import * as cookie from "cookie"
+import Link from "next/link"
+import { Text, Box, Flex, Button } from "rebass/styled-components"
+import Layout from "components/Layout"
 
-import { getUserFromAuthToken, getStats } from "../lib/db";
+import { getUserFromAuthToken, getStats } from "../lib/db"
 
 export default function TipPage({ user, stats }) {
-  const [mode, setMode] = React.useState("donations");
+  const [mode, setMode] = React.useState("donations")
 
   return (
     <Layout user={user}>
@@ -76,18 +76,13 @@ export default function TipPage({ user, stats }) {
                 ))}
               {mode === "donations" &&
                 stats.txs.map((tx, index) => (
-                  <Box
-                    key={tx.id}
-                    mt={index === 0 ? 4 : 4}
-                    sx={{ border: "1px solid gray18" }}
-                  >
+                  <Box key={tx.id} mt={index === 0 ? 4 : 4} sx={{ border: "1px solid gray18" }}>
                     <Text display="inline-block" mr={2}>
                       ${tx.amount}{" "}
                       <Text display="inline-block" fontWeight="normal">
                         {tx.from ? (
                           <>
-                            from <Text display="inline-block">{tx.from}</Text>{" "}
-                            to{" "}
+                            from <Text display="inline-block">{tx.from}</Text> to{" "}
                           </>
                         ) : (
                           ""
@@ -108,30 +103,30 @@ export default function TipPage({ user, stats }) {
         )}
       </Box>
     </Layout>
-  );
+  )
 }
 
 export async function getServerSideProps(context) {
-  const { auth_token } = cookie.parse(context.req.headers.cookie || "");
+  const { auth_token } = cookie.parse(context.req.headers.cookie || "")
 
   try {
-    const user = await getUserFromAuthToken(auth_token);
+    const user = await getUserFromAuthToken(auth_token)
 
-    const approvedProfiles = ["cheese__omelette", "nebb_bb", "bobscully"];
+    const approvedProfiles = ["nebaleb"]
     if (!user || !approvedProfiles.includes(user.username)) {
-      return { props: {} };
+      return { props: {} }
     }
 
-    const stats = await getStats();
+    const stats = await getStats()
 
     return {
       props: {
         user: { ...user, isLoggedIn: true },
         stats: stats,
       },
-    };
+    }
   } catch (e) {
-    return { props: {} };
+    return { props: {} }
     // return {
     //   redirect: {
     //     destination: `/`,
