@@ -1,32 +1,22 @@
-import Link from "next/link";
-import { Box, Flex, Button, Text } from "rebass/styled-components";
-import * as cookie from "cookie";
-import Layout from "components/Layout";
+import Link from "next/link"
+import { Box, Flex, Button, Text } from "rebass/styled-components"
+import * as cookie from "cookie"
+import Layout from "components/Layout"
 
-import { getDataFromAuthToken } from "../lib/db";
+import { getDataFromAuthToken } from "../lib/db"
 
-const STREAM_LABS_AUTH = `https://streamlabs.com/api/v1.0/authorize?client_id=${process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI}&scope=donations.create+alerts.create&response_type=code`;
+const STREAM_LABS_AUTH = `https://streamlabs.com/api/v1.0/authorize?client_id=${process.env.NEXT_PUBLIC_STREAMLABS_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_STREAMLABS_REDIRECT_URI}&scope=donations.create+alerts.create&response_type=code`
 
 export default function Login({ user }) {
   return (
     <Layout user={user} disableLogin>
       <Box my={6} maxWidth={800} mx="auto">
-        <Flex
-          alignItems="center"
-          flexDirection={["column", "column", "column"]}
-          px={[4, 0]}
-        >
+        <Flex alignItems="center" flexDirection={["column", "column", "column"]} px={[4, 0]}>
           <Text fontSize={[32]} lineHeight={1.1} fontWeight="bold">
             Login
           </Text>
 
-          <Box
-            mt={4}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            width="100%"
-          >
+          <Box mt={4} display="flex" flexDirection="column" alignItems="center" width="100%">
             <Link href={STREAM_LABS_AUTH} passHref>
               <Button
                 width={["100%", "auto"]}
@@ -38,7 +28,7 @@ export default function Login({ user }) {
               </Button>
             </Link>
           </Box>
-          <Box
+          {/* <Box
             mt={2}
             display="flex"
             flexDirection="column"
@@ -65,22 +55,22 @@ export default function Login({ user }) {
             <Text fontSize={1} fontWeight="normal" mt={1} color="gray">
               (@StreamElements please give me an API key)
             </Text>
-          </Box>
+          </Box> */}
         </Flex>
       </Box>
     </Layout>
-  );
+  )
 }
 
 export async function getServerSideProps(context) {
-  const { auth_token } = cookie.parse(context.req.headers.cookie || "");
+  const { auth_token } = cookie.parse(context.req.headers.cookie || "")
 
   try {
     if (auth_token) {
-      const { username } = getDataFromAuthToken(auth_token);
+      const { username } = getDataFromAuthToken(auth_token)
 
       if (username) {
-        return { props: { user: { isLoggedIn: true, username } } };
+        return { props: { user: { isLoggedIn: true, username } } }
       }
     }
 
@@ -90,8 +80,8 @@ export async function getServerSideProps(context) {
           isLoggedIn: false,
         },
       },
-    };
+    }
   } catch (error) {
-    return { props: {} };
+    return { props: {} }
   }
 }
